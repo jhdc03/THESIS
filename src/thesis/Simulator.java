@@ -11,7 +11,7 @@ package thesis;
  */
 
 
-class Simulator {
+public class Simulator {
     OrderedSet EventQueue;
     double time;
     double now() {

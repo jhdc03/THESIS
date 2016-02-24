@@ -9,7 +9,7 @@ package thesis;
  *
  * @author harve
  */
-public class Medium extends Entity{
+public class Medium {
     
     private float bandwidth;
     private float reliability;

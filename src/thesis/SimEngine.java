@@ -14,7 +14,7 @@ import thesis.NodeCreator.NodeType;
  *
  * @author harve
  */
-public class SimEngine  {
+public class SimEngine extends Simulator{
   /**
    * Time to wait for an iteration.
    */
@@ -23,27 +23,39 @@ public class SimEngine  {
   NodeStore                   store        = new NodeStore();
   Queue<Message>              messageQueue = new LinkedList<Message>();
   Queue<Message>              newMessages  = new LinkedList<Message>();
-  MessageRelay                thread       = new MessageRelay();
 
 
-  void runSimulation() {
-    if (thread.isAlive() == false) {
-      KILL_THREAD = false;
-      thread = new MessageRelay();
-      thread.start();
-      
-    }
-  }
   
 
 
-  class MessageRelay extends Thread {
 
-    public void run() {     
-              MainLoop();
+    public void start() { 
+        getTestEvents();
+        
+        //testLoop();    
+        //MainLoop();
     }
+  public void testLoop() {
+      EventQueue  = new ListQueue();
+      int t=0;        
+         //consumeInput(e);
+         doAllEvents();
+          t++;
+      
+         
+         
   }
-
+  
+  public void getTestEvents(){
+      EventQueue  = new ListQueue();
+      consumeInput(EventManager.inAddNode(10, 10, 23, true));
+      consumeInput(EventManager.inAddNode(10, 10, 23, true));
+      insert(new CreateEvent(2, EventManager.inAddNode(10, 10, 23, true)));
+      insert(new CreateEvent(3, EventManager.inAddNode(10, 10, 23, true)));
+      insert(new CreateEvent(6, EventManager.outNodeInfo("hi")));
+      doAllEvents();
+  
+  }
   public void MainLoop() {
     Node node = null;
     Message message = null;
@@ -128,9 +140,6 @@ public class SimEngine  {
     
     // Enter critical area
       switch(e.eventType){
-      case IN_START_SIM :
-        runSimulation();
-        break;
       
         
       case IN_ADD_NODE:
@@ -158,6 +167,24 @@ public class SimEngine  {
         }
         else {
           OutputHandler.dispatch(EventManager.outError("Could not delete node " + e.nodeId + ", node does not exist"));
+        }
+        break;
+        
+      case OUT_NODE_INFO:
+          
+          System.out.println("test print node");
+        Node node = null;
+        Iterator<Node> i;
+        i = store.getNodes();
+        while(i.hasNext()) {
+          node = i.next();
+          //if the node is null, it was deleted, continue
+          System.out.println("ID :" + node.getAttributes().id+"\n");
+          System.out.println("X :" + node.getAttributes().x+"\n");
+          System.out.println("Y :" + node.getAttributes().y+"\n");
+          System.out.println("Promiscuous :" + node.getAttributes().isPromiscuous+"\n");
+          
+          
         }
         break;
         
@@ -220,7 +247,7 @@ public class SimEngine  {
       }
   }
 
-  private NodeType nodeType = null;
+  private NodeType nodeType = NodeType.AODV;
 
   public NodeType getNodeType() {
     return nodeType;

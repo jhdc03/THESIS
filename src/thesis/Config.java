@@ -10,7 +10,7 @@ package thesis;
  *
  * @author harve
  */
-public class Config extends  Entity{
+public class Config{
     
     //Global
     private long mediumBandwidth;
@@ -22,7 +22,17 @@ public class Config extends  Entity{
     private float energyConsumptionIdleState;
     private float WirelessMediumReliability;
     
-    Entity e= new Entity();
+    public void Init(){
+    
+    
+    
+    }
+    
+    public void AddHardcodedNodes(){
+        
+    
+    
+    }
     /**
      * @return the mediumBandwidth
      */

@@ -22,7 +22,7 @@ public class THESIS {
     
      public void start() {
          
-         new EventManager2().start();
+         new SimEngine().start();
         
     }
      
