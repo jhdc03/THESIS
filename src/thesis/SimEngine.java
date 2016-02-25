@@ -14,64 +14,51 @@ import thesis.NodeCreator.NodeType;
  *
  * @author harve
  */
-public class SimEngine extends Simulator{
+public class SimEngine{
   /**
    * Time to wait for an iteration.
    */
+  double time;
   private int                 WAIT_TIME    = 10;
   private boolean             KILL_THREAD  = false;
   NodeStore                   store        = new NodeStore();
   Queue<Message>              messageQueue = new LinkedList<Message>();
   Queue<Message>              newMessages  = new LinkedList<Message>();
-
-
+  OrderedSet EventQueue;
+  
+  
+    
+    double now() {
+        return time;
+    }
+    
+  void doAllEvents() {
+        Event e;
+        while ( (e= (Event) EventQueue.removeFirst()) != null) {
+            time = e.time;
+            e.execute(this);
+        }
+    }
+    void insert(Event e) {
+        EventQueue.insert(e);
+    }
+    Event cancel(Event e)  {
+        throw new java.lang.RuntimeException("Method not implemented");
+    }
+    
+    
   public void start() { 
         EventQueue = new ListQueue();
         
-        insert(new CreateEvent(1, EventManager.inAddNode(1, 2, 3, true)));
-        //insert(new SimEngine(0,EventManager.inAddNode(111, 111, 333, true)));
-        //insert(new SimEngine(2,EventManager.inAddNode(1, 2, 3, true)));
+        insert(new CreateEvent(1,EventManager.inAddNode(1, 2, 3, true)));
+        insert(new CreateEvent(0,EventManager.inAddNode(111, 111, 333, true)));
+        insert(new CreateEvent(2,EventManager.inAddNode(1, 2, 3, true)));
         insert(new CreateEvent(3,EventManager.outNodeInfo("hi")));
         doAllEvents();
         
         //MainLoop();
     }
   
-/*
-    SimEngine() {}
-    
-  
-    SimEngine(double time, EventManager em) {
-        this.time = time;
-        this.em= em;
-    }
-  public void start() { 
-        Simulator s = new  Simulator();
-        s.EventQueue = new ListQueue();
-        s.insert(new SimEngine(0,EventManager.inAddNode(111, 111, 333, true)));
-        s.insert(new SimEngine(2,EventManager.inAddNode(1, 2, 3, true)));
-        s.insert(new SimEngine(3,EventManager.outNodeInfo("hi")));
-        s.doAllEvents();
-        
-        //MainLoop();
-    }
-  
-  
-  public void execute(Simulator simulator) {
-      
-        consumeInput(em);
-
-       
-        consumeInput(EventManager.outNodeInfo("hi"));
-        System.out.println("The time is "+time + "\n" );
-        
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-   */ 
     
  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
@@ -155,7 +142,7 @@ public class SimEngine extends Simulator{
    * 
    */
  
-  public void consumeInput(EventManager e) {
+  public  void consumeInput(EventManager e) {
     Node n;
     
     // Enter critical area

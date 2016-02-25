@@ -13,7 +13,7 @@ import java.util.Random;
 
 
 
-public class ApplicationLayer extends Simulator{
+public class ApplicationLayer extends SimEngine{
     
     //generate random number of bits in the packet
     public int generateData() {

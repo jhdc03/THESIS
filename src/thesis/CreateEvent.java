@@ -10,18 +10,14 @@ package thesis;
  * @author harve
  */
 public class CreateEvent extends  Event {
-
-    //private final EventManager e;
     CreateEvent(double time, EventManager em) {
         this.time = time;
         this.em= em;
     }
 
 
-    public void execute(Simulator simulator) {
-        //SimEngine s = new SimEngine();
-        //s.consumeInput(em);
-        //s.getTestEvents();
+    public void execute(SimEngine simulator) {
+        simulator.consumeInput(em);
         System.out.println("The time is "+time + "\n" );
         
     }
