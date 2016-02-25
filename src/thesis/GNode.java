@@ -36,43 +36,10 @@ public class GNode extends JPanel {
     this.layeredPane = layeredPane;
     this.range = range;
 
-    // Setup the default graphic, state
-    img_ = ImageFactory.getNodeImg();
-
-    setOpaque(false);
-
-    // Setup the bounds given by x and y, and the size of the node
-    setSize(new Dimension(img_.getWidth(null), img_.getHeight(null)));
-    setLocation(new Point(x, y));
-
-    // Add the internal mouse listeners
-    addMouseListener(new GNodeMouseListener());
-    addMouseMotionListener(new GNodeMouseMotionListener());
 
   }
 
-
-  public void cleanup() {
-    //Cleanup the dragged node if needed
-    if(draggedGNode != null) {
-      draggedGNode.cleanup();
-      draggedGNode = null;
-    }
-  }
  
-  private static Rectangle r = new Rectangle(7, 7, 22, 19);
-  @Override
-  public void paintComponent(Graphics g) {
-
-    super.paintComponent(g);
-    
-    // Draw the graphic
-    g.drawImage(img_, 0, 0, null);
-
-    // Draw the node id onto the graphic
-    ImageFactory.drawNodeID(g, id_, r);
-
-  }
 
   // /Functions
   private boolean locked = false;
@@ -100,7 +67,7 @@ public class GNode extends JPanel {
     isSelected = true;
     GNode.SelectedNode = this;
     // System.out.println("selecting a node..");
-    this.img_ = ImageFactory.getSelectedNodeImg();
+   // this.img_ = ImageFactory.getSelectedNodeImg();
 
     if (tmp != null) {
       tmp.repaint();
@@ -114,8 +81,8 @@ public class GNode extends JPanel {
     // System.out.println("unselecting a node..");
     isSelected = false;
     GNode.SelectedNode = null;
-    this.img_ = ImageFactory.getNodeImg();
-
+   // this.img_ = ImageFactory.getNodeImg();
+//
     this.repaint();
 
   }
@@ -148,23 +115,6 @@ public class GNode extends JPanel {
     return p;
   }
 
-  private void setEntered(boolean entered) {
-    // If the node is selected, don't draw a hover image
-    if (isSelected) {
-      return;
-    }
-
-    if (entered) {
-
-      // Set image to hover image
-      img_ = ImageFactory.getHoveredNodeImg();
-    }
-    // unset hover image
-    else {
-      img_ = ImageFactory.getNodeImg();
-    }
-    this.repaint();
-  }
 
   // ID of the node
   private String                      id_;
@@ -177,7 +127,6 @@ public class GNode extends JPanel {
 
   private JLayeredPane                layeredPane;
 
-  private DraggedGNode                draggedGNode;
 
   private BufferedImage               img_      = null;
 
@@ -239,20 +188,7 @@ public class GNode extends JPanel {
         return;
       }
 
-      // If no node was being dragged, no work to do.
-      if (draggedGNode == null) {
-        return;
-      }
 
-      // Notify the handlers of the node movement
-      for (GNodeListener l : listeners) {
-        l.nodeMoved((GNode) e.getSource(), draggedGNode.getX(),
-            draggedGNode.getY());
-      }
-
-      // Remove the dragged node.
-      draggedGNode.cleanup();
-      draggedGNode = null;
       isClicked = false;
     }
 
@@ -262,7 +198,7 @@ public class GNode extends JPanel {
         return;
       }
       // Set state to entered
-      setEntered(true);
+      //setEntered(true);
 
       // Notify the handlers
       for (GNodeListener l : listeners) {
@@ -276,7 +212,7 @@ public class GNode extends JPanel {
         return;
       }
       // Set state to not entered
-      setEntered(false);
+      //setEntered(false);
 
       // Notify the handler
       for (GNodeListener l : listeners) {
@@ -297,67 +233,7 @@ public class GNode extends JPanel {
         return;
       }
 
-      // System.out.println("Node dragged");
-      // If this is the first time through, create a new dragged node.
-      if (draggedGNode == null) {
-        draggedGNode = new DraggedGNode((GNode) e.getSource());
-        // System.out.println("Adding new Dragged Node");
-      }
-
-      // System.out.printf("Mouse X: %d Y: %d", e.getX(), e.getY());
-      // Update the dragged node's position.
-      draggedGNode.moveXYOffset(e.getX(), e.getY());
-
     }
-  }
-
-  private class DraggedGNode extends JPanel {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-
-    DraggedGNode(GNode parent) {
-      // Copy in attributes
-      parent_ = parent;
-
-      // Setup the ghosted node graphic
-      img_ = ImageFactory.getGhostedNodeImg();
-
-      // Set the initial coordinates
-      moveXYOffset(parent.getX(), parent.getY());
-      setSize(new Dimension(img_.getWidth(null), img_.getHeight(null)));
-
-      // Add this canvas to the parental container at the popup level
-      parent.layeredPane.add(this, JLayeredPane.POPUP_LAYER);
-
-      setOpaque(false);
-      // System.out.println("Creating new drag node..");
-    }
-
-    @Override
-    public void paintComponent(Graphics g) {
-      // Draw the graphic
-      g.drawImage(img_, 0, 0, null);
-
-    }
-
-    public void moveXYOffset(int x, int y) {
-      int xOffset = parent_.getX() + x - img_.getWidth(null) / 2;
-      int yOffset = parent_.getY() + y - img_.getHeight(null) / 2;
-      setLocation(xOffset, yOffset);
-    }
-
-    public void cleanup() {
-      // Remove this canvas from the parent container
-      layeredPane.remove(this);
-      layeredPane.invalidate();
-    }
-
-    private BufferedImage img_;
-
-    private GNode         parent_;
-
   }
 
 

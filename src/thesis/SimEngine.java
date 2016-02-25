@@ -50,11 +50,15 @@ public class SimEngine implements InputConsumer,NodeInspector{
     
   public void start() { 
         EventQueue = new ListQueue();
-        
+        GUI gui= new GUI();
         insert(new CreateEvent(1,EventManager.inAddNode(1, 2, 3, true)));
         insert(new CreateEvent(0,EventManager.inAddNode(111, 111, 333, true)));
         insert(new CreateEvent(2,EventManager.inAddNode(1, 2, 3, true)));
         insert(new CreateEvent(3,EventManager.outNodeInfo("hi")));
+        gui.consumeOutput(EventManager.outNodeInfo("hi"));
+        //gui.consumeOutput(EventManager.outInformation("hi"));
+        
+        
         doAllEvents();
         
         //MainLoop();

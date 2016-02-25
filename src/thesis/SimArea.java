@@ -27,10 +27,6 @@ public class SimArea extends JLayeredPane {
   // /////////////////////////////Constructor
   public SimArea() {
     setLayout(null);
-    //XYTickPanel xyticks = new XYTickPanel(this);
-    //add(xyticks, JLayeredPane.DEFAULT_LAYER);
-    //moveToBack(xyticks);
-    setLocked(true);
     addMouseListener(new PopClickListener());
     setVisible(true);
     
@@ -46,43 +42,20 @@ public class SimArea extends JLayeredPane {
 
   private NodeInspector nodeInspector;
 
-  public Point getBoundedNodePoint(Point unboundPoint) {
-    // enforce an X Y boundrary
-    int x, y;
 
-    x = unboundPoint.x;
-    y = unboundPoint.y;
 
-    Point maxPoint = maxNodePoint();
-    Point minPoint = minNodePoint();
-    x = Math.min(x, maxPoint.x);
-    x = Math.max(x, minPoint.x);
-    y = Math.min(y, maxPoint.y);
-    y = Math.max(y, minPoint.y);
-
-    return new Point(x, y);
-  }
-
-  public Point minNodePoint() {
-    return new Point(0, 0);
-  }
-
-  public Point maxNodePoint() {
-    return new Point(getWidth() - ImageFactory.getNodeImg().getWidth(),
-        getHeight() - ImageFactory.getNodeImg().getHeight());
-  }
 
   class NodeActionHandler implements GNodeListener {
 
     public void nodeMoved(GNode n, int x, int y) {
       // enforce simArea's bound restrictions
-      Point boundedPoint = getBoundedNodePoint(new Point(x, y));
+     // Point boundedPoint = getBoundedNodePoint(new Point(x, y));
 
       // drop all connection animations associated with this node
       //animations.dropConns(n);
       
       // issue a move node request
-      moveNodeReq(n.getId(), boundedPoint.x, boundedPoint.y);
+     // moveNodeReq(n.getId(), boundedPoint.x, boundedPoint.y);
 
       // propagate the signal to other listeners
       for (GNodeListener g : nodeListeners) {
@@ -179,61 +152,6 @@ public class SimArea extends JLayeredPane {
     InputHandler.dispatch(EventManager.inMoveNode(id, x, y));
   }
 
-  public void moveNode(String id, int x, int y) {
-    // Get the gnode from the map
-    GNode gnode = getGNode(id);
-
-    // If it doesn't exist, theres a problem
-    assert (gnode != null);
-
-    // move the x y coords
-    gnode.setXY(x, y);
-
-    // drop any connections this node might have
-    //animations.dropConns(gnode);
-
-  }
-
-  public void deleteNode(String id) {
-    // Get the gnode
-    GNode gnode = getGNode(id);
-
-    // If it doesn't exist, just return
-    if(gnode == null) {
-      return;
-    }
-    
-    // Unselect this node
-    gnode.unselect();
-    
-    // Remove it from the layeredPanel
-    this.remove(this.getIndexOf(gnode));
-
-    // remove it from the map
-    gnodemap.remove(id);
-
-    // cleanup the gnode itself
-    gnode.cleanup();
-
-    // drop any connections it might have
-    //animations.removeRangeIndicator(gnode);
-    //animations.dropConns(gnode);
-
-    gnode = null;
-
-    reassessFPS();
-    this.invalidate();
-    this.repaint();
-  }
-
-  public void setNodeRange(String id, int range) {
-    GNode g = getGNode(id);
-    if (g == null)
-      return;
-
-    g.setRange(range);
-
-  }
 
   // This function adds a node to the GUI. It's assumed that the node now exists
   // in the simulator.
@@ -257,7 +175,7 @@ public class SimArea extends JLayeredPane {
     //animations.addRangeIndicator(node);
 
     reassessFPS();
-
+    nodeAttributesArea.openNodeDialog(/*gnode.getId()*/ "A");
   }
 
   private boolean graphicsEnabled = true;
@@ -341,8 +259,8 @@ public class SimArea extends JLayeredPane {
 
     public void actionPerformed(ActionEvent e) {
       //Enforce boundaries
-      Point p = getBoundedNodePoint(new Point(this.x,this.y));
-      addNewNodeReq(p.x,p.y);
+      //Point p = getBoundedNodePoint(new Point(this.x,this.y));
+      //addNewNodeReq(p.x,p.y);
     }
   }
 
@@ -378,7 +296,9 @@ public class SimArea extends JLayeredPane {
       view_item.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
           if (nodeAttributesArea != null) {
-            nodeAttributesArea.openNodeDialog(gnode.getId());
+              Iterator<Node> i;
+             // i=store.get
+            nodeAttributesArea.openNodeDialog(/*gnode.getId()*/ "A");
           }
         }
       });
@@ -455,32 +375,8 @@ public class SimArea extends JLayeredPane {
    * @param locked
    *          the state of the simulation
    */
-  public void setLocked(boolean locked) {
-    this.locked = locked;
 
-    // propagate signal to nodes
-    for (GNode gnode : gnodemap.values()) {
-      gnode.setLocked(locked);
-    }
 
-    lockCanvas(locked);
-
-  }
-
-  private LockBox lockBox;
-
-  private void lockCanvas(boolean locked) {
-    if (locked) {
-      lockBox = new LockBox(this);
-      addComponentListener(lockBox);
-      lockBox.updateSize();
-    } else {
-      if (lockBox != null) {
-        this.removeComponentListener(lockBox);
-        this.remove(lockBox);
-      }
-    }
-  }
 
   /**
    * You can use this function to determine the state of the sim area.
@@ -500,80 +396,16 @@ public class SimArea extends JLayeredPane {
       nodeIds.add(n.getId());
     }
     for (String id : nodeIds) {
-      deleteNode(id);
     }
   }
 
-  public void setSimSpeed(int speed) {
-    // propagate the speed setting down to animation sub systems
-    //Animations.setSimSpeed(speed);
 
-  }
-
-  public void simPaused() {
-    // Drop all message animations
-    //animations.dropAll();
-  }
-
-  public void simStopped() {
-    // Drop all message animations
-    //animations.dropAll();
-
-    // lock the user interface
-    setLocked(true);
-  }
 
   public void setNodeAttributesArea(NodeAttributesArea nodeAttributesArea) {
     this.nodeAttributesArea = nodeAttributesArea;
   }
 
-  
-  private static Color LOCKBOX_COLOR = new Color(0,0,0,20);
-  private class LockBox extends JPanel implements ComponentListener {
 
-    private static final long serialVersionUID = 1L;
-
-    public void updateSize() {
-      this.setSize(parent.getSize());
-    }
-
-    private JLayeredPane parent;
-
-    public LockBox(JLayeredPane parent) {
-      this.parent = parent;
-      setVisible(true);
-      parent.add(this, JLayeredPane.POPUP_LAYER);
-      setOpaque(false);
-      setLocation(0, 0);
-
-    }
-
-    public void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      g.setColor(LOCKBOX_COLOR);
-      g.fillRect(0, 0, getWidth(), getHeight());
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent arg0) {
-      this.updateSize();
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent arg0) {
-      this.updateSize();
-    }
-
-    @Override
-    public void componentResized(ComponentEvent arg0) {
-      this.updateSize();
-    }
-
-    @Override
-    public void componentShown(ComponentEvent arg0) {
-      this.updateSize();
-    }
-  }
 
   private boolean lockedReplayMode = false;
   public void setLockedReplayMode(boolean b) {

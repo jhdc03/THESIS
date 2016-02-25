@@ -127,10 +127,10 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
           return;
         }
         // Enforce boundaries
-        Point p = simArea.getBoundedNodePoint(new Point(X, Y));
+        //Point p = simArea.getBoundedNodePoint(new Point(X, Y));
 
         // Dispatch the signal
-        InputHandler.dispatch(EventManager.inMoveNode(id, p.x, p.y));
+       // InputHandler.dispatch(EventManager.inMoveNode(id, p.x, p.y));
 
       }
     });
@@ -160,10 +160,10 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
         }
 
         // Enforce boundaries
-        Point p = simArea.getBoundedNodePoint(new Point(X, Y));
+        //Point p = simArea.getBoundedNodePoint(new Point(X, Y));
 
         // Dispatch the signal
-        InputHandler.dispatch(EventManager.inMoveNode(id, p.x, p.y));
+        //InputHandler.dispatch(EventManager.inMoveNode(id, p.x, p.y));
       }
     });
 
@@ -318,7 +318,7 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
       nodeId = iter.next();
       dialog = openNodeDialogs.get(nodeId);
       if (dialog.isVisible() == true) {
-        dialog.setVisible(false);
+        dialog.setVisible(true);
       }
     }
     openNodeDialogs.clear();

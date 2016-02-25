@@ -149,6 +149,8 @@ public class GUI extends JFrame implements OutputConsumer {
     public EventManager e;
 
     public void run() {
+        
+        
       switch (e.eventType) {
       case OUT_ADD_NODE:
         // Add the node
@@ -159,32 +161,9 @@ public class GUI extends JFrame implements OutputConsumer {
         simArea.selectNode(e.nodeId);
         nodeAttributesArea.setNodeById(e.nodeId);   
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
+        
         break;
 
-      case OUT_MOVE_NODE:
-        //Move the node
-        simArea.moveNode(e.nodeId, e.nodeX, e.nodeY);
-        
-        //select the node
-        simArea.selectNode(e.nodeId);
-        nodeAttributesArea.setNodeById(e.nodeId);
-        
-        //show the event in the visual log
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        break;
-
-      case OUT_SET_NODE_RANGE:
-        // Refresh the node attributes panel
-        nodeAttributesArea.setNodeById(e.nodeId);
-        simArea.setNodeRange(e.nodeId, e.nodeRange);
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        break;
-        
-      case OUT_SET_NODE_PROMISCUITY:
-        // Refresh the node attributes panel
-        nodeAttributesArea.setNodeById(e.nodeId);
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        break;
     
       case OUT_MSG_RECEIVED:
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
@@ -225,7 +204,7 @@ public class GUI extends JFrame implements OutputConsumer {
         
       case OUT_DEL_NODE:
         // Remove the node
-        simArea.deleteNode(e.nodeId);
+       //simArea.deleteNode(e.nodeId);
         nodeAttributesArea.nodeDeleted(e.nodeId);
         logArea.appendLog("SIM INFO", e.informationalMessage, e.currentQuantum);
         break;
@@ -245,73 +224,6 @@ public class GUI extends JFrame implements OutputConsumer {
         nodeAttributesArea.updateNodeDialogs();
         break;
 
-      case OUT_SIM_SPEED: 
-        simArea.setSimSpeed(e.newSimSpeed);
-        break;
-        
-      case OUT_START_SIM:
-        //Notify the menu that a sim has started
-        //menuArea.simStarted();
-        //Tell the simarea what the simulation speed is
-        simArea.setSimSpeed(e.newSimSpeed);
-        logArea.appendLog("SIM INFO", e.informationalMessage, e.currentQuantum);
-        break;
-
-      case OUT_STOP_SIM:
-        //Notify the menu that the sim has stopped
-        //menuArea.simStopped();
-        simArea.simStopped();
-        nodeAttributesArea.simStopped();
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        
-        //Prompt the user to save the log
-        int ret = JOptionPane.showConfirmDialog(null,
-            "Simulation Completed. Would you like to save the log file?", 
-            "Simulation Completed.", JOptionPane.YES_NO_OPTION);
-        if(ret == JOptionPane.YES_OPTION) {
-          Utilities.runSaveLogDialog(simArea);
-        }
-            
-        break;
-
-      case OUT_PAUSE_SIM:
-        //Notify the menu the the sim has paused
-        //menuArea.simPaused();
-        simArea.simPaused();
-        nodeAttributesArea.simPaused();
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        break;
-
-      case OUT_RESUME_SIM:
-        //Notify the menu that the sim has resumed
-        //menuArea.simResumed();
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        break;
-
-      case OUT_CLEAR_SIM:
-        //Clear the sim area.
-        nodeAttributesArea.clear();
-        simArea.clear();
-        logArea.appendLog("SIM INFO", e.informationalMessage, e.currentQuantum);
-        break;
-     
-      case OUT_NEW_SIM:
-        //Clear the sim area.
-        simArea.clear();
-        
-        //Clear the node attributes area.
-        nodeAttributesArea.clear();
-        
-        //clear the console
-        logArea.clear();
-        
-        //Unlock the sim area
-        simArea.setLocked(false);
-        
-        //Let the menu area know that a new sim has been created
-        //menuArea.newSim(e.nodeType);
-        
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
 
       }
     }
@@ -320,6 +232,7 @@ public class GUI extends JFrame implements OutputConsumer {
   public void consumeOutput(EventManager e) {
     // schedule the event to be processed later so as to not disturb the gui's
     // event thread
+    
     ThreadSafeConsumer c = new ThreadSafeConsumer();
 
     // Copy the event to the thread safe consumer instance
