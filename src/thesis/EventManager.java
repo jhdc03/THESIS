@@ -352,12 +352,10 @@ public class EventManager {
       e.destinationId = details[3];
       e.informationalMessage = details[4];
       e.transmittedMessage = details[5];
-      e.newSimSpeed = Integer.parseInt(details[6]);
       e.nodeX = Integer.parseInt(details[7]);
       e.nodeY = Integer.parseInt(details[8]);
       e.nodeRange = Integer.parseInt(details[9]);
       e.nodeType = parseNodeType(details[10]);
-      e.currentQuantum = Long.parseLong(details[11]);
       e.isPromiscuous = Boolean.parseBoolean(details[12]);
       
     }

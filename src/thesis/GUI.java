@@ -17,13 +17,10 @@ public class GUI extends JFrame implements OutputConsumer {
    * 
    */
   private static final long  serialVersionUID    = 1L;
-  private JPanel             simPanel            = new JPanel();
   private JPanel             logPanel            = new JPanel();
-  private JPanel             bottomRightPanel = new JPanel();
 
   private LogArea            logArea             = new LogArea();
   private NodeAttributesArea nodeAttributesArea  = new NodeAttributesArea();
-  private SimArea            simArea             = new SimArea();
 
 
   public GUI() {
@@ -35,9 +32,6 @@ public class GUI extends JFrame implements OutputConsumer {
         System.exit(0);
       }
     });
-    
-    //Initialize images
-    //ImageFactory.checkInit();
    
     //Add a listener for resize events
     this.addComponentListener(new java.awt.event.ComponentAdapter() 
@@ -75,15 +69,10 @@ public class GUI extends JFrame implements OutputConsumer {
     // Use another borderlayout for the subpanel.
     subpanel.setLayout(new BorderLayout());
 
-    // Add the GuiCanvas to the Center part
-    simPanel.setLayout(new BorderLayout());
-    simPanel.add(simArea, BorderLayout.CENTER);
-    subpanel.add(simPanel, BorderLayout.CENTER);
 
     // Add the Status log panel to the bottom part.
     logPanel.setLayout(new BorderLayout());
     logPanel.add(logArea, BorderLayout.CENTER);
-    logPanel.add(bottomRightPanel, BorderLayout.EAST);
     subpanel.add(logPanel, BorderLayout.SOUTH);
 
     // initialize communication paths between the gui objects
@@ -112,9 +101,7 @@ public class GUI extends JFrame implements OutputConsumer {
     Dimension windowSize = new Dimension(r.width, r.height);
 
     this.setPreferredSize(windowSize);
-    logPanel.setPreferredSize(new Dimension(logPanel.getPreferredSize().width, 210));
-    simPanel.setPreferredSize(new Dimension((int) (windowSize.width),
-        (int) (windowSize.height * .8)));
+    logPanel.setPreferredSize(new Dimension(logPanel.getPreferredSize().width, 800));
   }
 
   private void setBorders() {
@@ -122,25 +109,18 @@ public class GUI extends JFrame implements OutputConsumer {
     raisedBevel = BorderFactory.createRaisedBevelBorder();
     loweredBevel = BorderFactory.createLoweredBevelBorder();
     compound = BorderFactory.createCompoundBorder(raisedBevel, loweredBevel);
-    simPanel.setBorder(compound);
 
   }
 
   private void coupleComponents() {
 
-   
-    // The node attributes panel and DARSAppMenu needs be able to augment the sim area
-    // (selecting a new node, etc)
-    nodeAttributesArea.setSimArea(simArea);
-    //menuArea.setSimArea(simArea);
-    //simArea.setNodeAttributesArea(nodeAttributesArea);
   }
 
   public void setNodeInspector(NodeInspector ni) {
     // Give it to the nodeAttributesArea instance
     nodeAttributesArea.setNodeInspector(ni);
-
   }
+  
   public void test(){
        /*  System.out.print("test create node");
        // Add the node
@@ -164,6 +144,19 @@ public class GUI extends JFrame implements OutputConsumer {
     // schedule the event to be processed later so as to not disturb the gui's
     // event thread
 switch (e.eventType) {
+    
+        /*case ADD_MESSAGE:
+                  // Get our source and destinations nodes
+            String destination = (String) nodeBox.getSelectedItem();
+            String source = sourceNode;
+            String messageText =  message.getText();
+            
+            Message mess = new Message(destination, source, messageText);
+            InputHandler.dispatch(EventManager.inInsertMessage(mess));
+    
+        break;
+    */
+    
       case OUT_ADD_NODE:
         nodeAttributesArea.nodeAdded(e.nodeId);
         nodeAttributesArea.setNodeById(e.nodeId);   

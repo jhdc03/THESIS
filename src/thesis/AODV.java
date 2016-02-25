@@ -117,11 +117,6 @@ public class AODV extends Node {
       
       }
       
-       
-      
-      
-      
-      //System.out.println(RouteTable.);
   }
   
 

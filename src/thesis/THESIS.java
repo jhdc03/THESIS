@@ -22,7 +22,6 @@ public class THESIS {
         SimEngine s = new SimEngine();
         InputHandler.addInputConsumer(s);
         
-        GUIStarter gs = new GUIStarter();
         GUI g = new GUI();
         g.setNodeInspector(s);
         OutputHandler.addOutputConsumer(g);

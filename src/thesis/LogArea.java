@@ -146,8 +146,8 @@ public class LogArea extends javax.swing.JPanel {
   public LogArea() {
 
     setBorder(BorderFactory.createTitledBorder(
-        BorderFactory.createEtchedBorder(), "Console", TitledBorder.CENTER,
-        TitledBorder.TOP, Defaults.BOLDFACED_FONT));
+        BorderFactory.createEtchedBorder(), "Logs", TitledBorder.CENTER,
+        TitledBorder.TOP));
 
     // Setup the text area.
     configureTextArea(textArea);

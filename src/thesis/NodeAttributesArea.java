@@ -211,11 +211,6 @@ public class NodeAttributesArea extends JPanel {
 
   private static final long serialVersionUID = 1L;
 
-  public void setSimArea(SimArea simArea) {
-    this.simArea = simArea;
-  }
-
-  private SimArea simArea;
 
 
   public void nodeAdded(String nodeId) {
