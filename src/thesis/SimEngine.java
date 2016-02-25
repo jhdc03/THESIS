@@ -8,17 +8,18 @@ import java.awt.Point;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import javax.swing.JDialog;
 import thesis.NodeCreator.NodeType;
 
 /**
  *
  * @author harve
  */
-public class SimEngine{
+public class SimEngine implements InputConsumer,NodeInspector{
   /**
    * Time to wait for an iteration.
    */
-  double time;
+  double time=0;
   private int                 WAIT_TIME    = 10;
   private boolean             KILL_THREAD  = false;
   NodeStore                   store        = new NodeStore();
@@ -28,7 +29,7 @@ public class SimEngine{
   
   
     
-    double now() {
+    public double now() {
         return time;
     }
     
@@ -355,6 +356,26 @@ public class SimEngine{
   
 
 
+  
+  // Fulfills the "Node Inspector" contract.
+  public JDialog getNodeDialog(String nodeId) {
+      Node node = store.getNode(nodeId);
+      if (node == null) {
+        return null;
+      }
+      return node.getNodeDialog();
+    
+  }
+  // Fulfills the "Node Inspector" contract.
+  public void updateNodeDialog(String nodeId, JDialog dialog) {
+
+      Node node = store.getNode(nodeId);
+      if (node == null) {
+        return;
+      }
+      node.updateNodeDialog(dialog);
+  }
+
   // Fulfills the "Node Inspector" contract.
   public NodeAttributes getNodeAttributes(String nodeId) {
       Node node = store.getNode(nodeId);
@@ -363,6 +384,8 @@ public class SimEngine{
         return null;
       }
       return node.getAttributes();
-    }
+  }
+
+
 
 }

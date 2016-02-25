@@ -10,6 +10,7 @@ package thesis;
  * @author harve
  */
 
+
 import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -145,5 +146,4 @@ public class AodvDialog extends JDialog {
     }
     return;
   }
-
 }

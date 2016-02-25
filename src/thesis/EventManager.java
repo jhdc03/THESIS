@@ -5,6 +5,7 @@
  */
 package thesis;
 
+import java.lang.reflect.Field;
 import thesis.NodeCreator.NodeType;
 
 /**
@@ -271,7 +272,7 @@ public class EventManager {
     //No match
     return null;
   }
-  /*
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
   static final Class<EventManager> c = EventManager.class;
   static final Field[] fields = c.getFields();
   public String getLogString() {
@@ -331,21 +332,7 @@ public class EventManager {
     }
     return null;
   }
-    
-  public static NodeType parseNodeType(String str) {
-    //Get each possible node type
-    NodeType[] nTypes =  Utilities.getNodeTypes();
-    
-    //For each nType..
-    for(NodeType nt : nTypes){
-      if(str.equals(nt.toString())) {
-        return nt;
-      }
-    }
-    
-    //No match
-    return null;
-  }
+
     
   
   public static EventManager parseLogString(String lineEvent) {
@@ -381,6 +368,6 @@ public class EventManager {
 
     return e;
   }
-  */
+  
   
 }

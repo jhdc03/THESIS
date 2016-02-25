@@ -5,6 +5,8 @@
  */
 package thesis;
 
+import javax.swing.JDialog;
+
 
 /**
  *
@@ -110,14 +112,44 @@ public abstract class Node{
   public abstract void newNarrativeMessage(String sourceID,
       String destinationID, String messageText);
 
-  /**
-   * Process an iteration of this node.
+   /**
+   * Return a JDialog that will be displayed by the GUI.
    * 
-   * This will do all the processing for a node's time interval.
+   * Each protocol must define this function so that the GUI can inspect the
+   * nodes information.
    * 
-   * @author kresss
+   * @author kennylmay
    */
- 
+  public abstract JDialog getNodeDialog();
+
+  /**
+   * Update the previously returned JDialog with the latest information for a
+   * node that will be showed to the GUI.
+   * 
+   * 
+   * Each protocol must define this function so that the GUI can inspect the
+   * nodes information.
+   * 
+   * @author kennylmay
+   */
+  public abstract void updateNodeDialog(JDialog dialog);
+
+  /**
+   * **************************************************************************
+   * *** Standard Node methods. Additional protocols should not modify these.
+   * **************************************************************************
+   */
+
+  /**
+   * This function will return the attributes that are defined in the Node
+   * class.
+   * 
+   * Note, this returns a copy of the node attributes. Not a reference to the
+   * attributes object itself.
+   * 
+   * @return NodeAttributes
+   */
+  
   public NodeAttributes getAttributes() {
     return att;
   }

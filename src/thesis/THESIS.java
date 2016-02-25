@@ -10,20 +10,23 @@ package thesis;
  * @author harve
  */
 public class THESIS {
-
+    
+    public THESIS(){}
     /**
      * @param args the command line arguments
      */
    
     
     public static void main(String[] args) {
-        new THESIS().start();
+        //ImageFactory.checkInit();
+        SimEngine s = new SimEngine();
+        GUIStarter gs = new GUIStarter();
+        GUI g = new GUI();
+        g.setNodeInspector(s);
+        OutputHandler.addOutputConsumer(g);
+        g.setVisible(true);
     }
     
-     public void start() {
-         
-         new SimEngine().start();
-        
-    }
+
      
 }
