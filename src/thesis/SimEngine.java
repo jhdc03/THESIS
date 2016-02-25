@@ -26,7 +26,7 @@ public class SimEngine implements InputConsumer,NodeInspector{
   Queue<Message>              messageQueue = new LinkedList<Message>();
   Queue<Message>              newMessages  = new LinkedList<Message>();
   OrderedSet EventQueue;
-  
+  static public Object        lock         = new Object();
   
     
     public double now() {
@@ -50,17 +50,17 @@ public class SimEngine implements InputConsumer,NodeInspector{
     
   public void start() { 
         EventQueue = new ListQueue();
-        GUI gui= new GUI();
-        insert(new CreateEvent(1,EventManager.inAddNode(1, 2, 3, true)));
-        insert(new CreateEvent(0,EventManager.inAddNode(111, 111, 333, true)));
-        insert(new CreateEvent(2,EventManager.inAddNode(1, 2, 3, true)));
-        insert(new CreateEvent(3,EventManager.outNodeInfo("hi")));
-        gui.consumeOutput(EventManager.outNodeInfo("hi"));
-        //gui.consumeOutput(EventManager.outInformation("hi"));
+        insert(new CreateEvent(0,EventManager.inAddNode(1, 2, 3, true)));
+        insert(new CreateEvent(1,EventManager.inAddNode(1, 1, 3, true)));
+        //insert(new CreateEvent(2,EventManager.inAddNode(1, 2, 3, true)));
+        insert(new CreateEvent(2,EventManager.outNodeInfo("hi")));
+
         
         
         doAllEvents();
-        
+        //gui.consumeOutput(EventManager.outAddNode(n));
+        //gui.test();
+        //gui.consumeOutput(EventManager.outNodeInfo("hi"));
         //MainLoop();
     }
   
@@ -167,7 +167,6 @@ public class SimEngine implements InputConsumer,NodeInspector{
 
         // Add it to the node store
         store.addNode(n);
-
         // Dispatch an output event indicating a new node has entered
         // the network.
         OutputHandler.dispatch(EventManager.outAddNode(ni));
@@ -181,22 +180,24 @@ public class SimEngine implements InputConsumer,NodeInspector{
           OutputHandler.dispatch(EventManager.outError("Could not delete node " + e.nodeId + ", node does not exist"));
         }
         break;
-        
+    //////////////////////////////////////////////////////////////////////    
       case OUT_NODE_INFO:
           
           System.out.println("test print node");
         Node node = null;
         Iterator<Node> i;
         i = store.getNodes();
-        
         while(i.hasNext()) {
           node = i.next();
+          node.addroute();
           System.out.println("Node count:"+ node.toString());
           //if the node is null, it was deleted, continue
           System.out.println("ID :" + node.getAttributes().id+"\n");
           System.out.println("X :" + node.getAttributes().x+"\n");
           System.out.println("Y :" + node.getAttributes().y+"\n");
           System.out.println("Promiscuous :" + node.getAttributes().isPromiscuous+"\n");
+          
+          //node.get
           
           
         }
@@ -359,16 +360,13 @@ public class SimEngine implements InputConsumer,NodeInspector{
   }
   
 
-
-  
-  // Fulfills the "Node Inspector" contract.
+    // Fulfills the "Node Inspector" contract.
   public JDialog getNodeDialog(String nodeId) {
       Node node = store.getNode(nodeId);
       if (node == null) {
         return null;
       }
       return node.getNodeDialog();
-    
   }
   // Fulfills the "Node Inspector" contract.
   public void updateNodeDialog(String nodeId, JDialog dialog) {
@@ -378,6 +376,7 @@ public class SimEngine implements InputConsumer,NodeInspector{
         return;
       }
       node.updateNodeDialog(dialog);
+    
   }
 
   // Fulfills the "Node Inspector" contract.
@@ -388,6 +387,7 @@ public class SimEngine implements InputConsumer,NodeInspector{
         return null;
       }
       return node.getAttributes();
+    
   }
 
 

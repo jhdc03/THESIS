@@ -26,7 +26,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class NodeAttributesArea extends JPanel implements GNodeListener {
+public class NodeAttributesArea extends JPanel {
 
   private JComboBox                nodeSelectorComboBox    = new JComboBox();
   private JSpinner                 nodeRangeSpinner        = new JSpinner(
@@ -78,7 +78,7 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
           setLock(false);
         }
         
-        simArea.selectNode(nodeSelectorComboBox.getSelectedItem().toString());
+        //simArea.selectNode(nodeSelectorComboBox.getSelectedItem().toString());
         
         
       }
@@ -217,17 +217,6 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
 
   private SimArea simArea;
 
-  @Override
-  public void nodeEntered(GNode node) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void nodeExited(GNode node) {
-    // TODO Auto-generated method stub
-
-  }
 
   public void nodeAdded(String nodeId) {
     nodeSelectorComboBox.addItem(nodeId);
@@ -245,26 +234,7 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
     jd.dispose();
   }
 
-  @Override
-  public void nodeMoved(GNode node, int new_x, int new_y) {
-    // TODO Auto-generated method stub
 
-  }
-
-  @Override
-  public void nodePopupEvent(GNode node, int x, int y) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void nodeSelected(GNode gnode) {
-    NodeAttributes ni = getAttributes(gnode.getId());
-    if (ni != null) {
-      //update the component
-      setAttributes(ni);
-    }
-  }
 
   private NodeAttributes getAttributes(String id) {
     // Use the node inspector interface to view the properties of the node
@@ -356,6 +326,7 @@ public class NodeAttributesArea extends JPanel implements GNodeListener {
     if (openNodeDialogs.containsKey(nodeID)) {
       return;
     }
+    //SimEngine s= new SimEngine();
     JDialog dialog = nodeInspector.getNodeDialog(nodeID);
     dialog.setVisible(true);
     openNodeDialogs.put(nodeID, dialog);

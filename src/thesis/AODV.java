@@ -94,6 +94,40 @@ public class AODV extends Node {
    * @return Message Message that is being sent into the network. If there are
    *         no more messages Null is returned.
    */
+  ////////////////////////////////////////////////////////////////////
+  //test area
+  @Override
+  public void addroute(){
+      RouteEntry a = new RouteEntry("a", 1, StateFlags.VALID, 3, "testa", 10);
+      RouteEntry b = new RouteEntry("b", 1, StateFlags.INVALID, 3, "testb", 10);
+      this.RouteTable.put("test route",a );
+      this.RouteTable.put("test route",b );
+      
+      
+      for (String key : this.RouteTable.keySet()) {
+        System.out.println(key + " " + this.RouteTable.get(key));
+         //print route entry 
+      System.out.println("print route entry");
+      System.out.println(this.RouteTable.get(key).getDestIP());
+      System.out.println(this.RouteTable.get(key).getHopCount());
+      System.out.println(this.RouteTable.get(key).getState());
+      System.out.println(this.RouteTable.get(key).getLifetime());
+      System.out.println(this.RouteTable.get(key).getNextHopIP());
+      System.out.println(this.RouteTable.get(key).getSeqNum());
+      
+      }
+      
+       
+      
+      
+      
+      //System.out.println(RouteTable.);
+  }
+  
+
+  
+  //////////////////////////////////////////////////////////////////////
+  
   public Message messageToNetwork() {
 
     Message Msg;
@@ -178,7 +212,7 @@ public class AODV extends Node {
      * Route Table Entry used to get the destination ID info in our Route Table.
      */
     RouteEntry DestEntry;
-
+    
     /**
      * Check to make sure that the sourceID is this node.
      */
@@ -1823,7 +1857,7 @@ public class AODV extends Node {
    * 
    */
   public JDialog getNodeDialog() {
-    AodvDialog dialog = new AodvDialog(null, this.att.id, this.CurrentTick,
+    AodvDialog dialog = new AodvDialog(null, this.att.id, 1,
         this.RouteTable);
     return (JDialog) dialog;
   }
@@ -1839,6 +1873,7 @@ public class AODV extends Node {
    * @return void
    * 
    */
+  @Override
   public void updateNodeDialog(JDialog dialog) {
     // Cast the JDialog into our type
     AodvDialog aodvDlg = (AodvDialog) dialog;

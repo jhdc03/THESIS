@@ -128,15 +128,12 @@ public class GUI extends JFrame implements OutputConsumer {
 
   private void coupleComponents() {
 
-    // The node attributes panel needs to listen for node changes (mouse overs,
-    // selects, etc)
-    simArea.addNodeListener(nodeAttributesArea);
    
     // The node attributes panel and DARSAppMenu needs be able to augment the sim area
     // (selecting a new node, etc)
     nodeAttributesArea.setSimArea(simArea);
     //menuArea.setSimArea(simArea);
-    simArea.setNodeAttributesArea(nodeAttributesArea);
+    //simArea.setNodeAttributesArea(nodeAttributesArea);
   }
 
   public void setNodeInspector(NodeInspector ni) {
@@ -144,24 +141,34 @@ public class GUI extends JFrame implements OutputConsumer {
     nodeAttributesArea.setNodeInspector(ni);
 
   }
-
-  private class ThreadSafeConsumer implements Runnable {
-    public EventManager e;
-
-    public void run() {
-        
-        
-      switch (e.eventType) {
-      case OUT_ADD_NODE:
-        // Add the node
-        simArea.addNewNode(e.nodeX, e.nodeY, e.nodeRange, e.nodeId);
-        nodeAttributesArea.nodeAdded(e.nodeId);
-        
+  public void test(){
+       /*  System.out.print("test create node");
+       // Add the node
+        simArea.addNewNode(12, 13, 100, "A");
+        nodeAttributesArea.nodeAdded("A");
+        System.out.print("test create node2");
         //select the node
-        simArea.selectNode(e.nodeId);
+        simArea.selectNode("A");
+        nodeAttributesArea.setNodeById("A");   
+       // logArea.appendLog("SIM INFO" , "");
+       nodeAttributesArea.setVisible(true);
+       
+       System.out.print("test create node3");
+       */
+   //if (nodeAttributesArea != null) {
+    //        nodeAttributesArea.openNodeDialog(/*gnode.getId()*/ "A");
+     //     }
+  }
+   
+  public void consumeOutput(EventManager e) {
+    // schedule the event to be processed later so as to not disturb the gui's
+    // event thread
+switch (e.eventType) {
+      case OUT_ADD_NODE:
+        nodeAttributesArea.nodeAdded(e.nodeId);
         nodeAttributesArea.setNodeById(e.nodeId);   
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
-        
+        nodeAttributesArea.openNodeDialog(e.nodeId);
         break;
 
     
@@ -180,7 +187,7 @@ public class GUI extends JFrame implements OutputConsumer {
   
       case OUT_NARRMSG_RECEIVED:
         // Animate the event
-        simArea.traceMessage(e.sourceId, e.destinationId, Defaults.NARRMSG_COLOR, 5, Defaults.NARRMSG_THICKNESS, 1);
+        //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.NARRMSG_COLOR, 5, Defaults.NARRMSG_THICKNESS, 1);
         logArea.appendLog("NODE INFO" , e.informationalMessage, e.currentQuantum);
         break;
 
@@ -189,7 +196,7 @@ public class GUI extends JFrame implements OutputConsumer {
       case OUT_CONTROLMSG_TRANSMITTED:
         //If the destination is BROADCAST, animate it.
         if(e.destinationId.equals(Message.BCAST_STRING)){
-          simArea.nodeBroadcast(e.sourceId);
+          //simArea.nodeBroadcast(e.sourceId);
           logArea.appendLog("NODE INFO", e.informationalMessage, e.currentQuantum);
         }
         break;
@@ -197,7 +204,7 @@ public class GUI extends JFrame implements OutputConsumer {
         
       case OUT_CONTROLMSG_RECEIVED:
         // Animate the event
-        simArea.traceMessage(e.sourceId, e.destinationId, Defaults.CNTRLMSG_COLOR,1, Defaults.CNTRLMSG_THICKNESS,0);
+        //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.CNTRLMSG_COLOR,1, Defaults.CNTRLMSG_THICKNESS,0);
         logArea.appendLog("NODE INFO", e.informationalMessage, e.currentQuantum);
         break;
 
@@ -225,27 +232,9 @@ public class GUI extends JFrame implements OutputConsumer {
         break;
 
 
-      }
+      
     }
-  }
 
-  public void consumeOutput(EventManager e) {
-    // schedule the event to be processed later so as to not disturb the gui's
-    // event thread
-    
-    ThreadSafeConsumer c = new ThreadSafeConsumer();
-
-    // Copy the event to the thread safe consumer instance
-    c.e = e;
-
-    // Invoke it later; This will push the runnable instance onto the
-    // Java Event Dispatching thread
-    if(!SwingUtilities.isEventDispatchThread()) {
-      SwingUtilities.invokeLater(c);
-    }
-    else {
-      c.run();
-    }
   }
 
  }

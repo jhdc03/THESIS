@@ -20,11 +20,13 @@ public class THESIS {
     public static void main(String[] args) {
         //ImageFactory.checkInit();
         SimEngine s = new SimEngine();
-        s.start();
+        InputHandler.addInputConsumer(s);
+        
         GUIStarter gs = new GUIStarter();
         GUI g = new GUI();
         g.setNodeInspector(s);
         OutputHandler.addOutputConsumer(g);
+        s.start();
         g.setVisible(true);
         
     }
