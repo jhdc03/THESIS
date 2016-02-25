@@ -13,15 +13,15 @@ public class CreateEvent extends  Event {
 
     //private final EventManager e;
     CreateEvent(double time, EventManager em) {
-        this.time=time;
-        this.em=em;
+        this.time = time;
+        this.em= em;
     }
 
 
     public void execute(Simulator simulator) {
-        
-        SimEngine s = new SimEngine();
-        s.consumeInput(em);
+        //SimEngine s = new SimEngine();
+        //s.consumeInput(em);
+        //s.getTestEvents();
         System.out.println("The time is "+time + "\n" );
         
     }
@@ -30,4 +30,6 @@ public class CreateEvent extends  Event {
     public int compareTo(Object o) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    
 }

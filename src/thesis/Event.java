@@ -11,7 +11,6 @@ package thesis;
  */
 abstract class  Event implements Comparable {
     double time;
-    int eventID;
     EventManager em= new EventManager();
     public boolean lessThan(Comparable y) {
         Event e = (Event) y;  // Will throw an exception if y is not an Event

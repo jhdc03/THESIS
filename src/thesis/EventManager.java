@@ -249,6 +249,7 @@ public class EventManager {
     e.informationalMessage = infoMsg;
     return e;
   }
+
   
   
    private static final NodeType[] nodeTypes = NodeType.values();

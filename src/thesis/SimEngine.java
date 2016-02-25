@@ -25,37 +25,57 @@ public class SimEngine extends Simulator{
   Queue<Message>              newMessages  = new LinkedList<Message>();
 
 
-  
-
-
-
-    public void start() { 
-        getTestEvents();
+  public void start() { 
+        EventQueue = new ListQueue();
         
-        //testLoop();    
+        insert(new CreateEvent(1, EventManager.inAddNode(1, 2, 3, true)));
+        //insert(new SimEngine(0,EventManager.inAddNode(111, 111, 333, true)));
+        //insert(new SimEngine(2,EventManager.inAddNode(1, 2, 3, true)));
+        insert(new CreateEvent(3,EventManager.outNodeInfo("hi")));
+        doAllEvents();
+        
         //MainLoop();
     }
-  public void testLoop() {
-      EventQueue  = new ListQueue();
-      int t=0;        
-         //consumeInput(e);
-         doAllEvents();
-          t++;
+  
+/*
+    SimEngine() {}
+    
+  
+    SimEngine(double time, EventManager em) {
+        this.time = time;
+        this.em= em;
+    }
+  public void start() { 
+        Simulator s = new  Simulator();
+        s.EventQueue = new ListQueue();
+        s.insert(new SimEngine(0,EventManager.inAddNode(111, 111, 333, true)));
+        s.insert(new SimEngine(2,EventManager.inAddNode(1, 2, 3, true)));
+        s.insert(new SimEngine(3,EventManager.outNodeInfo("hi")));
+        s.doAllEvents();
+        
+        //MainLoop();
+    }
+  
+  
+  public void execute(Simulator simulator) {
       
-         
-         
-  }
+        consumeInput(em);
+
+       
+        consumeInput(EventManager.outNodeInfo("hi"));
+        System.out.println("The time is "+time + "\n" );
+        
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+   */ 
+    
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   
-  public void getTestEvents(){
-      EventQueue  = new ListQueue();
-      consumeInput(EventManager.inAddNode(10, 10, 23, true));
-      consumeInput(EventManager.inAddNode(10, 10, 23, true));
-      insert(new CreateEvent(2, EventManager.inAddNode(10, 10, 23, true)));
-      insert(new CreateEvent(3, EventManager.inAddNode(10, 10, 23, true)));
-      insert(new CreateEvent(6, EventManager.outNodeInfo("hi")));
-      doAllEvents();
   
-  }
   public void MainLoop() {
     Node node = null;
     Message message = null;
@@ -176,8 +196,10 @@ public class SimEngine extends Simulator{
         Node node = null;
         Iterator<Node> i;
         i = store.getNodes();
+        
         while(i.hasNext()) {
           node = i.next();
+          System.out.println("Node count:"+ node.toString());
           //if the node is null, it was deleted, continue
           System.out.println("ID :" + node.getAttributes().id+"\n");
           System.out.println("X :" + node.getAttributes().x+"\n");
