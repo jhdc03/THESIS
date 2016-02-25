@@ -33,12 +33,11 @@ public class EventManager {
   public String               destinationId;
   public String               informationalMessage;
   public String               transmittedMessage;
-  public int                  newSimSpeed;
   public int                  nodeX;
   public int                  nodeY;
   public int                  nodeRange;
   public NodeCreator.NodeType nodeType;
-  public long                 currentQuantum;
+  public long                 time;
   public boolean              isPromiscuous;
   
   
@@ -53,6 +52,21 @@ public class EventManager {
     nodeId = n.id;
     isPromiscuous = n.isPromiscuous;
   }
+  
+    private static SimTime simTime;
+  public static void setSimTime(SimTime s) {
+    simTime = s;
+  }
+  
+  // Hide the default constructor. DARSEvents can only be made through the
+  // supplied functions that follow.
+  public EventManager() {
+    //If the time keeper is set, view the current time from it.
+    if(simTime != null) {
+      time = simTime.getTime();
+    }
+  }
+  
     public static EventManager inInsertMessage(Message message) {
     EventManager e = new EventManager();
     e.transmittedMessage = message.message;
@@ -67,6 +81,33 @@ public class EventManager {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_INSERT_MESSAGE;
     e.informationalMessage = "User message inserted into the network. Source ID: " + sourceID + " Dest ID: " + destID + " Message: " + message;
+    return e;
+  }
+  
+  public static EventManager inNewSim(NodeType nt) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.IN_NEW_SIM;
+    e.nodeType = nt;
+    return e;
+  }
+  
+  public static EventManager outClearSim() {
+    EventManager e = new EventManager();
+    e.eventType = EventType.OUT_CLEAR_SIM;
+    e.informationalMessage = "Nodes cleared.";
+    return e;
+  }
+  
+  public static EventManager inStartSim() {
+    EventManager e = new EventManager();
+    e.eventType = EventType.IN_START_SIM;
+    return e;
+  }
+
+  public static EventManager outStartSim() {
+    EventManager e = new EventManager();
+    e.eventType = EventType.OUT_START_SIM;
+    e.informationalMessage = "Simulation Started.";
     return e;
   }
   
@@ -356,6 +397,7 @@ public class EventManager {
       e.nodeY = Integer.parseInt(details[8]);
       e.nodeRange = Integer.parseInt(details[9]);
       e.nodeType = parseNodeType(details[10]);
+      e.time = Long.parseLong(details[11]);
       e.isPromiscuous = Boolean.parseBoolean(details[12]);
       
     }

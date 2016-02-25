@@ -10,7 +10,7 @@ package thesis;
  * @author harve
  */
 public class CreateEvent extends  Event {
-    CreateEvent(double time, EventManager em) {
+    CreateEvent(long time, EventManager em) {
         this.time = time;
         this.em= em;
     }

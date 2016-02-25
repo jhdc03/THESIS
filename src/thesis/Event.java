@@ -10,7 +10,7 @@ package thesis;
  * @author harve
  */
 abstract class  Event implements Comparable {
-    double time;
+    long time;
     EventManager em= new EventManager();
     
     public boolean lessThan(Comparable y) {

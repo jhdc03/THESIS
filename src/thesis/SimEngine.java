@@ -15,11 +15,11 @@ import thesis.NodeCreator.NodeType;
  *
  * @author harve
  */
-public class SimEngine implements InputConsumer,NodeInspector{
+public class SimEngine implements InputConsumer, SimTime, NodeInspector{
   /**
    * Time to wait for an iteration.
    */
-  double time=0;
+  private long time=0;
   private int                 WAIT_TIME    = 10;
   private boolean             KILL_THREAD  = false;
   NodeStore                   store        = new NodeStore();
@@ -29,9 +29,11 @@ public class SimEngine implements InputConsumer,NodeInspector{
   static public Object        lock         = new Object();
   
     
-    public double now() {
-        return time;
-    }
+      
+  @Override
+  public long getTime() {
+    return time;
+  }
     
   void doAllEvents() {
         Event e;
@@ -47,7 +49,68 @@ public class SimEngine implements InputConsumer,NodeInspector{
         throw new java.lang.RuntimeException("Method not implemented");
     }
     
-    
+  public void Init() { 
+        NodeType nt = NodeType.AODV;
+          if(nt == null) {
+            //User canceled..
+            return;
+          }
+          
+         //Start a new simualation
+        InputHandler.dispatch(EventManager.inNewSim(nt));
+    }
+  /////////////////////////////////////////////////////////////
+  //USEFULL Stuff
+  /*
+  addSingleNodeMenuItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        InputHandler.dispatch(DARSEvent.inAddNode(Defaults.X,Defaults.Y,Defaults.RANGE, Defaults.IS_PROMISCUOUS));
+      }
+    }
+    );
+
+  
+      deleteNodeMenuItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        String selectedNode = simArea.getSelectedNodeID();
+        if (selectedNode == null){
+          return;
+        }
+        InputHandler.dispatch(DARSEvent.inDeleteNode(selectedNode));
+      }
+    });
+  
+   addMultipleNodesMenuItem.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        Random r = new Random();
+        double X = simArea.maxNodePoint().x;
+        double Y = simArea.maxNodePoint().y;
+        int numberOfNodes = 0;
+        String input = JOptionPane.showInputDialog(null, "How many nodes would you like to add?");
+
+        // If they hit cancel return.
+        if (input == null){
+          return;
+        }
+        
+        try{
+          numberOfNodes = Integer.parseInt(input);
+        }catch (NumberFormatException nfe) {
+          JOptionPane.showMessageDialog(null, "Invalide Entry, Numeric Only.");
+          return;
+        }  
+      
+        for (int i = 1; i <= numberOfNodes; i++){
+          int range = r.nextInt(400) + 50; // Min range of 50
+          int x = r.nextInt((int)X);
+          int y = r.nextInt((int)Y);
+          InputHandler.dispatch(DARSEvent.inAddNode(x,y,range, Defaults.IS_PROMISCUOUS));
+        }
+       }
+      
+    });
+   */
+  /////////////////////////////////////////////////////////////
   public void start() { 
         EventQueue = new ListQueue();
         insert(new CreateEvent(0,EventManager.inAddNode(1, 2, 3, true)));

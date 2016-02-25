@@ -160,13 +160,13 @@ switch (e.eventType) {
       case OUT_ADD_NODE:
         nodeAttributesArea.nodeAdded(e.nodeId);
         nodeAttributesArea.setNodeById(e.nodeId);   
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         nodeAttributesArea.openNodeDialog(e.nodeId);
         break;
 
     
       case OUT_MSG_RECEIVED:
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         JOptionPane.showMessageDialog(null, "Successful Message Transmission!\n" +
                                             "Source Node: "+ e.sourceId + "\n" + 
                                             "Destination Node: " + e.destinationId + "\n" +
@@ -174,14 +174,14 @@ switch (e.eventType) {
         break;
       
       case OUT_INSERT_MESSAGE:
-        logArea.appendLog("SIM INFO" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         break;
         
   
       case OUT_NARRMSG_RECEIVED:
         // Animate the event
         //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.NARRMSG_COLOR, 5, Defaults.NARRMSG_THICKNESS, 1);
-        logArea.appendLog("NODE INFO" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("NODE INFO" , e.informationalMessage, e.time);
         break;
 
       
@@ -190,7 +190,7 @@ switch (e.eventType) {
         //If the destination is BROADCAST, animate it.
         if(e.destinationId.equals(Message.BCAST_STRING)){
           //simArea.nodeBroadcast(e.sourceId);
-          logArea.appendLog("NODE INFO", e.informationalMessage, e.currentQuantum);
+          logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         }
         break;
         
@@ -198,7 +198,7 @@ switch (e.eventType) {
       case OUT_CONTROLMSG_RECEIVED:
         // Animate the event
         //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.CNTRLMSG_COLOR,1, Defaults.CNTRLMSG_THICKNESS,0);
-        logArea.appendLog("NODE INFO", e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         break;
 
         
@@ -206,17 +206,17 @@ switch (e.eventType) {
         // Remove the node
        //simArea.deleteNode(e.nodeId);
         nodeAttributesArea.nodeDeleted(e.nodeId);
-        logArea.appendLog("SIM INFO", e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM INFO", e.informationalMessage, e.time);
         break;
 
       case OUT_DEBUG:
-        logArea.appendLog("SIM DEBUG" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM DEBUG" , e.informationalMessage, e.time);
         break;
       case OUT_ERROR:
-        logArea.appendLog("SIM ERROR" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("SIM ERROR" , e.informationalMessage, e.time);
         break;
       case OUT_NODE_INFO:
-        logArea.appendLog("NODE INFO" , e.informationalMessage, e.currentQuantum);
+        logArea.appendLog("NODE INFO" , e.informationalMessage, e.time);
         break;
         
       case OUT_QUANTUM_ELAPSED:
