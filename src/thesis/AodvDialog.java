@@ -44,8 +44,7 @@ public class AodvDialog extends JDialog {
   private JPanel            nodeInfoPanel        = new JPanel(nodeInfoLayout);
   private JPanel            nodeSourcePanel      = new JPanel(nodeSouceLayout);
   private JPanel            nodeTimePanel        = new JPanel(nodeTimeLayout);
-  private JPanel            routePanel           = new JPanel(
-                                                     nodeRouteTableLayout);
+  private JPanel            routePanel           = new JPanel(nodeRouteTableLayout);
   private JScrollPane       scroller;
 
   DefaultTableModel         model                = new DefaultTableModel();

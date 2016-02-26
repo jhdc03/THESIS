@@ -61,11 +61,7 @@ public abstract class Node{
    * @return Message Message that is being sent into the network.
    */
   
-  //test
-  
-  public abstract void addroute();
-  //public abstract RouteEntry getroute();
-  //
+
   public abstract Message messageToNetwork();
 
   /**

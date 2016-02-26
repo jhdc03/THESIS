@@ -106,10 +106,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         //insert(new CreateEvent(2, EventManager.outNodeInfo("hi")));
 
         doAllEvents();
-        //gui.consumeOutput(EventManager.outAddNode(n));
-        //gui.test();
-        //gui.consumeOutput(EventManager.outNodeInfo("hi"));
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             runSimulation();
         }
         
@@ -138,7 +135,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
     Message message = null;
     Iterator<Node> i;
     Iterator<Message> mi;
-   
+   /*
     // If there are any messages in the newMessage Q, introduce them
     // into the network.
     mi = newMessages.iterator();
@@ -158,7 +155,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
       //Introduce the message into the network
       n.newNarrativeMessage(m.originId, m.destinationId, m.message);
     }
-    
+    */
     
     // If there are messages in the messageQueue try to attempt delivery.
     while (messageQueue.isEmpty() == false) {
@@ -261,7 +258,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 i = store.getNodes();
                 while (i.hasNext()) {
                     node = i.next();
-                    node.addroute();
                     System.out.println("Node count:" + node.toString());
                     //if the node is null, it was deleted, continue
                     System.out.println("ID :" + node.getAttributes().id + "\n");

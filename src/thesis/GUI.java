@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Queue;
 
 public class GUI extends JFrame implements OutputConsumer {
 
@@ -144,8 +143,8 @@ switch (e.eventType) {
     
       case OUT_ADD_NODE:
         nodeAttributesArea.nodeAdded(e.nodeId);
-        nodeAttributesArea.setNodeById(e.nodeId);   
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
+        //test
         nodeAttributesArea.openNodeDialog(e.nodeId);
         break;
 
@@ -184,14 +183,6 @@ switch (e.eventType) {
         // Animate the event
         //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.CNTRLMSG_COLOR,1, Defaults.CNTRLMSG_THICKNESS,0);
         logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
-        break;
-
-        
-      case OUT_DEL_NODE:
-        // Remove the node
-       //simArea.deleteNode(e.nodeId);
-        nodeAttributesArea.nodeDeleted(e.nodeId);
-        logArea.appendLog("SIM INFO", e.informationalMessage, e.time);
         break;
 
       case OUT_DEBUG:
