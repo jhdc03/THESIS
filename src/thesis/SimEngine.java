@@ -76,8 +76,8 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
    
       public void AddMultipleNodes( ) {
         Random r = new Random();
-        double X = 100;
-        double Y = 100;
+        double X = 200;
+        double Y = 200;
         int numberOfNodes = 5;
 
 
@@ -99,17 +99,21 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         AddMultipleNodes();
         
         EventQueue = new ListQueue();
-        //InputHandler.dispatch(EventManager.inAddNode(Defaults.X,Defaults.Y,Defaults.RANGE, Defaults.IS_PROMISCUOUS));
-        //insert(new CreateEvent(0, EventManager.inAddNode(1, 2, 3, true)));
-        //insert(new CreateEvent(1, EventManager.inAddNode(1, 1, 3, true)));
-        //insert(new CreateEvent(2,EventManager.inAddNode(1, 2, 3, true)));
-        //insert(new CreateEvent(2, EventManager.outNodeInfo("hi")));
-
+        
+        
         doAllEvents();
-        for (int i = 0; i < 10000; i++) {
+        
+        for (int i = 0; i < 100; i++) {
             runSimulation();
         }
-        
+                Node node = null;
+                Iterator<Node> i;
+                i = store.getNodes();
+                while (i.hasNext()) {
+                    node = i.next();
+                    OutputHandler.dispatch(EventManager.outAddNode(node.getAttributes()));
+                }
+                
         
     }
 
@@ -135,7 +139,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
     Message message = null;
     Iterator<Node> i;
     Iterator<Message> mi;
-   /*
+   
     // If there are any messages in the newMessage Q, introduce them
     // into the network.
     mi = newMessages.iterator();
@@ -155,7 +159,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
       //Introduce the message into the network
       n.newNarrativeMessage(m.originId, m.destinationId, m.message);
     }
-    */
+    
     
     // If there are messages in the messageQueue try to attempt delivery.
     while (messageQueue.isEmpty() == false) {
@@ -239,7 +243,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 store.addNode(n);
                 // Dispatch an output event indicating a new node has entered
                 // the network.
-                OutputHandler.dispatch(EventManager.outAddNode(ni));
+                
                 break;
 
             case IN_DEL_NODE:

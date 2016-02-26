@@ -9,9 +9,9 @@ package thesis;
  *
  * @author harve
  */
-public class THESIS {
+public class SimulitorMain {
     
-    public THESIS(){}
+    public SimulitorMain(){}
     /**
      * @param args the command line arguments
      */

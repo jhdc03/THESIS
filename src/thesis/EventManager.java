@@ -160,7 +160,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_ADD_NODE;
     d.setNodeAttributes(n);
-    d.informationalMessage = "Node Added: " + n.id + ".";
+    d.informationalMessage = "Node Routing Table Displayed: " + n.id + ".";
     return d;
     
   }

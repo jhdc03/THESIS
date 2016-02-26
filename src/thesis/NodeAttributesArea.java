@@ -69,7 +69,9 @@ public class NodeAttributesArea extends JPanel {
     if (openNodeDialogs.containsKey(nodeID)) {
       return;
     }
+   
     JDialog dialog = nodeInspector.getNodeDialog(nodeID);
+    //dialog.setModal(true);
     dialog.setVisible(true);
     openNodeDialogs.put(nodeID, dialog);
   }

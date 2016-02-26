@@ -1074,6 +1074,13 @@ public class AODV extends Node {
 
   }
 
+ 
+  /**
+   * Receive a Route Reply Message
+   * 
+   * @author kresss
+   */
+  
   /**
    * Receive a Route Reply Message
    * 
@@ -1356,6 +1363,7 @@ public class AODV extends Node {
      */
     sendMessage(Msg);
   }
+
 
   /**
    * Send a Hello Message (Special RREQ)

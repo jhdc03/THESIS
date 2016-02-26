@@ -109,7 +109,7 @@ public class AodvDialog extends JDialog {
     // Display the Panel
     this.pack();
     this.setModal(false);
-    this.setAlwaysOnTop(true);
+    //this.setAlwaysOnTop(true);
     this.setLocationRelativeTo(frame);
   }
 
