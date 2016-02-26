@@ -292,7 +292,11 @@ public class EventManager {
     return e;
   }
 
-  
+  public static EventManager outQuantumElapsed() {
+    EventManager e = new EventManager();
+    e.eventType = EventType.OUT_QUANTUM_ELAPSED;
+    return e;
+  }
   
    private static final NodeType[] nodeTypes = NodeType.values();
   public static NodeType[] getNodeTypes() {

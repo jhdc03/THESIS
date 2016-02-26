@@ -102,9 +102,6 @@ public class NodeAttributesArea extends JPanel {
     blockChangeEvents = true;
     
     nodeSelectorComboBox.setSelectedItem(n.id);
-    //XSpinner.setValue(n.x);
-    //YSpinner.setValue(n.y);
-    //nodeRangeSpinner.setValue(n.range);
     promiscuousModeCheckBox.setSelected(n.isPromiscuous);
     
     
@@ -137,7 +134,6 @@ public class NodeAttributesArea extends JPanel {
     if (openNodeDialogs.containsKey(nodeID)) {
       return;
     }
-    //SimEngine s= new SimEngine();
     JDialog dialog = nodeInspector.getNodeDialog(nodeID);
     dialog.setVisible(true);
     openNodeDialogs.put(nodeID, dialog);

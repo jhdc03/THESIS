@@ -122,22 +122,7 @@ public class GUI extends JFrame implements OutputConsumer {
   }
   
   public void test(){
-       /*  System.out.print("test create node");
-       // Add the node
-        simArea.addNewNode(12, 13, 100, "A");
-        nodeAttributesArea.nodeAdded("A");
-        System.out.print("test create node2");
-        //select the node
-        simArea.selectNode("A");
-        nodeAttributesArea.setNodeById("A");   
-       // logArea.appendLog("SIM INFO" , "");
-       nodeAttributesArea.setVisible(true);
-       
-       System.out.print("test create node3");
-       */
-   //if (nodeAttributesArea != null) {
-    //        nodeAttributesArea.openNodeDialog(/*gnode.getId()*/ "A");
-     //     }
+
   }
    
   public void consumeOutput(EventManager e) {

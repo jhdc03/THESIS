@@ -117,7 +117,16 @@ public abstract class Node{
    */
   public abstract void newNarrativeMessage(String sourceID,
       String destinationID, String messageText);
-
+  
+  /**
+   * Process an iteration of this node.
+   * 
+   * This will do all the processing for a node's time interval.
+   * 
+   * @author kresss
+   */
+  public abstract void clockTick();
+  
    /**
    * Return a JDialog that will be displayed by the GUI.
    * 
