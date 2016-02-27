@@ -238,7 +238,13 @@ public class AODV extends Node {
     if (message.originId.equals(this.att.id)) {
       return;
     }
-
+    
+    Medium m = new Medium();
+    if (m.drop()) {
+        OutputHandler.dispatch(EventManager.outPacketDropped(message.originId, this.att.id));
+        
+      return;
+    }
     /**
      * Get the message type.
      * 
@@ -1589,13 +1595,26 @@ public class AODV extends Node {
    * This will do all the processing for a node's time interval.
    * 
    */
+    //APP Layer Generate Data
+  public void generateData(){
+            String destination = "A";
+            String messageText =  "Generated Data";
+            
+    
+            Message mess = new Message(destination, att.id, messageText);
+            sendMessage(mess);
+            InputHandler.dispatch(EventManager.inInsertMessage(mess));
+            
+  }       
+  
+
   public void clockTick() {
 
     /**
      * Increment the CurrentTick for this time quantum.
      */
     CurrentTick++;
-
+    
     /**
      * Receive and process each message on the Receive Queue.
      */
@@ -1612,7 +1631,7 @@ public class AODV extends Node {
      * Send Hello Message if it is time.
      */
     sendHello();
-
+    //generateData();
     checkRouteTable();
   }
 

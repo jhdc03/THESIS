@@ -13,7 +13,7 @@ public class EventManager {
     // Output event types
     OUT_ADD_NODE,OUT_MSG_TRANSMITTED, OUT_DEL_NODE, OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
     OUT_CONTROLMSG_RECEIVED, OUT_NARRMSG_TRANSMITTED, OUT_CONTROLMSG_TRANSMITTED, 
-    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE
+    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED
   };
   
   public EventType            eventType;
@@ -67,8 +67,15 @@ public class EventManager {
   public static EventManager outInsertMessage(String sourceID, String destID, String message) {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_INSERT_MESSAGE;
-    e.informationalMessage = "User message inserted into the network. Source ID: " + sourceID + " Dest ID: " + destID + " Message: " + message;
+    e.informationalMessage = "Data Generated. Source ID: " + sourceID + " Dest ID: " + destID + " Message: " + message;
     return e;
+  }
+  
+  public static EventManager outPacketDropped(String sourceID, String destID) {
+    EventManager d = new EventManager();
+    d.eventType = EventType.OUT_PACKET_DROPPED;
+    d.informationalMessage = "Packet Dropped  : Source ID: " + sourceID + " Dest ID: " + destID +".";
+    return d;
   }
   
   public static EventManager inAddNode(int x, int y, int range, boolean isPromiscuous) {
@@ -112,6 +119,8 @@ public class EventManager {
     return d;
   }
   
+  
+  
   public static EventManager outDeleteNode(String id) {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEL_NODE;
@@ -126,7 +135,7 @@ public class EventManager {
     e.sourceId = sourceId;
     e.destinationId = destId;
     e.transmittedMessage = message;
-    e.informationalMessage = "Node " + sourceId + " successfuly sent a message to Node " + destId;
+    e.informationalMessage = "Node " + sourceId + " successfuly sent a message to Node " + destId + " Message: " + e.transmittedMessage;
     return e;
   }
   

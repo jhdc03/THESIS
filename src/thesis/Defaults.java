@@ -12,7 +12,7 @@ public class Defaults {
   public static final boolean IS_PROMISCUOUS = false;
   public static final float ENERGY = 100;
   public static final int RANGE = 150;
-  public static final int SIM_TIME_END = 100;
+  public static final int SIM_TIME_END = 1000;
   public static final String TITLE_STRING = "Wireless Sensor Network Simulator";
   public static final int LOG_AREA_BUF_SIZE = 131072;
   public static final float BANDWIDTH = 100;
@@ -21,5 +21,5 @@ public class Defaults {
   public static final float ENERGY_CONSUMPTION_TRANSMISSION_STATE = 0;
   public static final float ENERGY_CONSUMPTION_RECIEVE_STATE = 0;
   public static final float ENERGY_CONSUMPTION_IDLE_STATE =0;
-  public static final float WIRELESS_MEDIUM_RELIABILITY= 100;
+  public static final float WIRELESS_MEDIUM_RELIABILITY= 50;
 }

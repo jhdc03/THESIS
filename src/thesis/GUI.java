@@ -105,18 +105,6 @@ public class GUI extends JFrame implements OutputConsumer {
     // schedule the event to be processed later so as to not disturb the gui's
 switch (e.eventType) {
     
-        /*case ADD_MESSAGE:
-                  // Get our source and destinations nodes
-            String destination = (String) nodeBox.getSelectedItem();
-            String source = sourceNode;
-            String messageText =  message.getText();
-            
-            Message mess = new Message(destination, source, messageText);
-            InputHandler.dispatch(EventManager.inInsertMessage(mess));
-    
-        break;
-    */
-    
       case OUT_ADD_NODE:
         nodeAttributesArea.nodeAdded(e.nodeId);
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
@@ -132,34 +120,28 @@ switch (e.eventType) {
     
       case OUT_MSG_RECEIVED:
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
-        JOptionPane.showMessageDialog(null, "Successful Message Transmission!\n" +
-                                            "Source Node: "+ e.sourceId + "\n" + 
-                                            "Destination Node: " + e.destinationId + "\n" +
-                                            "Message: " + e.transmittedMessage);
         break;
       
+      case OUT_PACKET_DROPPED:
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
+        break;
+        
       case OUT_INSERT_MESSAGE:
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         break;
         
   
       case OUT_NARRMSG_RECEIVED:
-        // Animate the event
-        //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.NARRMSG_COLOR, 5, Defaults.NARRMSG_THICKNESS, 1);
         logArea.appendLog("NODE INFO" , e.informationalMessage, e.time);
         break;
         
       case OUT_CONTROLMSG_TRANSMITTED:
-        //If the destination is BROADCAST, animate it.
         if(e.destinationId.equals(Message.BCAST_STRING)){
-          //simArea.nodeBroadcast(e.sourceId);
           logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         }
         break;
         
       case OUT_CONTROLMSG_RECEIVED:
-        // Animate the event
-        //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.CNTRLMSG_COLOR,1, Defaults.CNTRLMSG_THICKNESS,0);
         logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         break;
 
