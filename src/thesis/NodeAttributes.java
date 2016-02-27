@@ -8,19 +8,21 @@ public class NodeAttributes {
   public final int x;
   public final int y;
   public final int range;
+  public final float energy;
   public final boolean isPromiscuous;
 
-  public NodeAttributes(String id, int x, int y, int range, boolean isPromiscuous) {
+  public NodeAttributes(String id, int x, int y, int range, float energy, boolean isPromiscuous) {
     this.id = id;
     this.x = x;
     this.y = y;
     this.range = range;
+    this.energy= energy;
     this.isPromiscuous = isPromiscuous;
   }
  
   //Copy constructor
   public NodeAttributes(NodeAttributes ni) {
-    this(ni.id, ni.x, ni.y, ni.range, ni.isPromiscuous);
+    this(ni.id, ni.x, ni.y, ni.range, ni.energy, ni.isPromiscuous);
   }
 
   // Hide the no arg constructor.
@@ -31,6 +33,7 @@ public class NodeAttributes {
     this.x = 0;
     this.y = 0;
     this.range = 0;
+    this.energy=0;
     this.isPromiscuous = false;
   }
     

@@ -25,13 +25,14 @@ public class EventManager {
   public int                  nodeX;
   public int                  nodeY;
   public int                  nodeRange;
+  public float                energy;
   public NodeCreator.NodeType nodeType;
   public long                 time;
   public boolean              isPromiscuous;
   
   
   public NodeAttributes getNodeAttributes() {
-    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, isPromiscuous);
+    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, energy, isPromiscuous);
   }
   
   public void setNodeAttributes(NodeAttributes n) {

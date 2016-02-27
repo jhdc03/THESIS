@@ -29,16 +29,12 @@ public class AODV extends Node {
   public static final int TTL_START            = 5;
   public static final int NET_DIAMETER         = 2 * TTL_START;
   public static final int NODE_TRAVERSAL_TIME  = 2;
-  public static final int NET_TRAVERSAL_TIME   = 2 * NODE_TRAVERSAL_TIME
-                                                   * NET_DIAMETER;
+  public static final int NET_TRAVERSAL_TIME   = 2 * NODE_TRAVERSAL_TIME * NET_DIAMETER;
   public static final int PATH_DISCOVERY_TIME  = 2 * NET_TRAVERSAL_TIME;
   public static final int DELETE_PERIOD        = 5;
   public static final int ALLOWED_HELLO_LOSS   = 2;
-
   public static final int ACTIVE_ROUTE_TIMEOUT = 75;
   public static final int MY_ROUTE_TIMEOUT     = 2 * ACTIVE_ROUTE_TIMEOUT;
-
-
   public static final int HELLO_INTERVAL       = 25;
 
 

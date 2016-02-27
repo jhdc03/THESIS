@@ -1,4 +1,3 @@
-
 package thesis;
 
 import java.awt.Point;
@@ -9,175 +8,140 @@ import java.util.Random;
 import javax.swing.JDialog;
 import thesis.NodeCreator.NodeType;
 
-
 public class SimEngine implements InputConsumer, SimTime, NodeInspector {
+
     private long time = 0;
     NodeStore store = new NodeStore();
     Queue<Message> messageQueue = new LinkedList<Message>();
     Queue<Message> newMessages = new LinkedList<Message>();
-    OrderedSet EventQueue;
 
     @Override
     public long getTime() {
         return time;
     }
 
-    void doAllEvents() {
-        Event e;
-        while ((e = (Event) EventQueue.removeFirst()) != null) {
-            time = e.time;
-            e.execute(this);
-        }
-    }
 
-    void insert(Event e) {
-        EventQueue.insert(e);
-    }
-
-    Event cancel(Event e) {
-        throw new java.lang.RuntimeException("Method not implemented");
-    }
-
-   
-      public void AddMultipleNodes( ) {
+    public void AddMultipleNodes() {
         Random r = new Random();
         double X = 200;
         double Y = 200;
         int numberOfNodes = 5;
 
-
-        for (int i = 1; i <= numberOfNodes; i++){
-          int range = r.nextInt(400) + 50; // Min range of 50
-          int x = r.nextInt((int)X);
-          int y = r.nextInt((int)Y);
-          InputHandler.dispatch(EventManager.inAddNode(x,y,range, Defaults.IS_PROMISCUOUS));
+        for (int i = 1; i <= numberOfNodes; i++) {
+            int range = r.nextInt(400) + 50; // Min range of 50
+            int x = r.nextInt((int) X);
+            int y = r.nextInt((int) Y);
+            InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.IS_PROMISCUOUS));
         }
-       }
-      
+    }
 
-    /////////////////////////////////////////////////////////////
- 
-    
-    
     public void start() {
         AddMultipleNodes();
-        
-        EventQueue = new ListQueue();
-        
-        
-        doAllEvents();
-        
-        for (int i = 0; i < 100; i++) {
+
+        for (int i = 0; i < Defaults.SIM_TIME_END; i++) {
             runSimulation();
         }
-                Node node = null;
-                Iterator<Node> i;
+        Node node = null;
+        Iterator<Node> i;
+        i = store.getNodes();
+        while (i.hasNext()) {
+            node = i.next();
+            OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
+        }
+
+    }
+
+    public void runSimulation() {
+
+        //Increment sim time
+        time++;
+
+        //Begin a new quantum
+        OutputHandler.dispatch(EventManager.outQuantumElapsed());
+        System.out.println(time);
+
+        
+        MainLoop();
+    }
+
+    public void MainLoop() {
+        Node node = null;
+        Message message = null;
+        Iterator<Node> i;
+        Iterator<Message> mi;
+
+        // If there are any messages in the newMessage Q, introduce them
+        // into the network.
+        mi = newMessages.iterator();
+        while (mi.hasNext()) {
+            //Get the ref to the message
+            Message m = mi.next();
+
+            //Delete it from the Q
+            mi.remove();
+
+            //Get the node
+            Node n = store.getNode(m.originId);
+            if (n == null) {
+                continue;
+
+            }
+            //Introduce the message into the network
+            n.newNarrativeMessage(m.originId, m.destinationId, m.message);
+        }
+
+        // If there are messages in the messageQueue try to attempt delivery.
+        while (messageQueue.isEmpty() == false) {
+            message = messageQueue.poll();
+
+            // If the message is a broadcast then try to send to everyone
+            if (message.destinationId == Message.BCAST_STRING) {
+
                 i = store.getNodes();
                 while (i.hasNext()) {
                     node = i.next();
-                    OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
+                    //if the node is null, it was deleted, continue
+                    if (node == null) {
+                        continue;
+                    }
+
+                    // Only allow the nodes in range to hear the broadcast.
+                    if (canCommunicate(message.originId, node.getAttributes().id) && message.originId != node.getAttributes().id) {
+                        node.messageToNode(message);
+                    }
                 }
-                
-        
-    }
+                // Else if the messageQueue is not a broadcast try to send it to the
+                // destination id.
+            } else if (canCommunicate(message.originId, message.destinationId)) {
+                // SAK - Send the message to the destination node.
+                store.getNode(message.destinationId).messageToNode(message);
+            }
+        }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void runSimulation() {
-        
-            //Increment sim time
-            time++;
-            
-            //Begin a new quantum
-            OutputHandler.dispatch(EventManager.outQuantumElapsed());
-            System.out.println(time);
-            
-            // Enter the critical area for the simulation
-            //////////////////////////////////////////////////////
-              MainLoop();
-      }
- 
-
-  public void MainLoop() {
-    Node node = null;
-    Message message = null;
-    Iterator<Node> i;
-    Iterator<Message> mi;
-   
-    // If there are any messages in the newMessage Q, introduce them
-    // into the network.
-    mi = newMessages.iterator();
-    while(mi.hasNext()) {
-      //Get the ref to the message
-      Message m = mi.next();
-      
-      //Delete it from the Q
-      mi.remove();
-      
-      //Get the node
-      Node n = store.getNode(m.originId);
-      if(n == null) {
-        continue;
-        
-      }
-      //Introduce the message into the network
-      n.newNarrativeMessage(m.originId, m.destinationId, m.message);
-    }
-    
-    
-    // If there are messages in the messageQueue try to attempt delivery.
-    while (messageQueue.isEmpty() == false) {
-      message = messageQueue.poll();
-
-      // If the message is a broadcast then try to send to everyone
-      if (message.destinationId == Message.BCAST_STRING) {  
-        
+        // Issue a clock tick to each node so that they can make algorithmic
+        // decisions.
         i = store.getNodes();
-        while(i.hasNext()) {
-          node = i.next();
-          //if the node is null, it was deleted, continue
-          if (node == null)
-            continue;
-          
-          // Only allow the nodes in range to hear the broadcast.
-          if (canCommunicate(message.originId, node.getAttributes().id) && message.originId != node.getAttributes().id) {
-            node.messageToNode(message);
-          }
+        while (i.hasNext()) {
+            // / Issue a clock tick to each node
+            node = i.next();
+            if (node == null) {
+                continue;
+            }
+            node.clockTick();
         }
-        // Else if the messageQueue is not a broadcast try to send it to the
-        // destination id.
-      } else {
-        if (canCommunicate(message.originId, message.destinationId)) {
-          // SAK - Send the message to the destination node.
-          store.getNode(message.destinationId).messageToNode(message);
+
+        // Check each node for messages waiting to be sent and gather them up
+        // to be stored in our message queue.
+        i = store.getNodes();
+        while (i.hasNext()) {
+            node = i.next();
+            // Gather all the messages from each node.
+            while ((message = node.messageToNetwork()) != null) {
+                messageQueue.add(message);
+            }
         }
-      }
-    }
 
-    // Issue a clock tick to each node so that they can make algorithmic
-    // decisions.
-    i = store.getNodes();
-    while(i.hasNext()) {
-      // / Issue a clock tick to each node
-      node = i.next();
-      if (node == null)
-        continue;
-      node.clockTick();
     }
-
-    // Check each node for messages waiting to be sent and gather them up
-    // to be stored in our message queue.
-    i = store.getNodes();
-    while(i.hasNext()) {
-      node = i.next();
-      // Gather all the messages from each node.
-      while ((message = node.messageToNetwork()) != null) {
-        messageQueue.add(message);
-      }
-    }
-    
-  }
-  
 
     public void consumeInput(EventManager e) {
         Node n;
@@ -193,14 +157,14 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 String id = assignNodeId();
 
                 // Make a new network node with these attributes
-                ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.isPromiscuous);
+                ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.energy, ni.isPromiscuous);
                 n = NodeCreator.makeNewNode(getNodeType(), ni);
                 OutputHandler.dispatch(EventManager.outAddNode(ni));
                 // Add it to the node store
                 store.addNode(n);
                 // Dispatch an output event indicating a new node has entered
                 // the network.
-                
+
                 break;
 
             case IN_DEL_NODE:
