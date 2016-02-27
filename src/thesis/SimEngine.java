@@ -11,17 +11,11 @@ import thesis.NodeCreator.NodeType;
 
 
 public class SimEngine implements InputConsumer, SimTime, NodeInspector {
-
-    /**
-     * Time to wait for an iteration.
-     */
     private long time = 0;
-    private int WAIT_TIME = 10;
     NodeStore store = new NodeStore();
     Queue<Message> messageQueue = new LinkedList<Message>();
     Queue<Message> newMessages = new LinkedList<Message>();
     OrderedSet EventQueue;
-    static public Object lock = new Object();
 
     @Override
     public long getTime() {
@@ -44,15 +38,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         throw new java.lang.RuntimeException("Method not implemented");
     }
 
-
-    /////////////////////////////////////////////////////////////
-    //USEFULL Stuff
-    /*
-        //add single node
-        InputHandler.dispatch(EventManager.inAddNode(Defaults.X,Defaults.Y,Defaults.RANGE, Defaults.IS_PROMISCUOUS));
-
-    */
-        //add multiple nodes
    
       public void AddMultipleNodes( ) {
         Random r = new Random();
@@ -90,7 +75,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 i = store.getNodes();
                 while (i.hasNext()) {
                     node = i.next();
-                    OutputHandler.dispatch(EventManager.outAddNode(node.getAttributes()));
+                    OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
                 }
                 
         
@@ -210,7 +195,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 // Make a new network node with these attributes
                 ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.isPromiscuous);
                 n = NodeCreator.makeNewNode(getNodeType(), ni);
-
+                OutputHandler.dispatch(EventManager.outAddNode(ni));
                 // Add it to the node store
                 store.addNode(n);
                 // Dispatch an output event indicating a new node has entered

@@ -8,13 +8,12 @@ public class EventManager {
     private static String newline = System.getProperty("line.separator");
   public enum EventType {
     // Input event types
-    IN_ADD_NODE, IN_MOVE_NODE, IN_DEL_NODE, IN_SET_NODE_RANGE, IN_SET_NODE_PROMISCUITY, IN_INSERT_MESSAGE,
+    IN_ADD_NODE,IN_DEL_NODE,IN_SET_NODE_PROMISCUITY, IN_INSERT_MESSAGE,
     
     // Output event types
-    OUT_ADD_NODE, OUT_MOVE_NODE, OUT_DEL_NODE, OUT_SET_NODE_RANGE, OUT_SET_NODE_PROMISCUITY,  
-    OUT_MSG_TRANSMITTED,  OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
+    OUT_ADD_NODE,OUT_MSG_TRANSMITTED, OUT_DEL_NODE, OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
     OUT_CONTROLMSG_RECEIVED, OUT_NARRMSG_TRANSMITTED, OUT_CONTROLMSG_TRANSMITTED, 
-    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO
+    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE
   };
   
   public EventType            eventType;
@@ -55,7 +54,7 @@ public class EventManager {
     }
   }
   
-    public static EventManager inInsertMessage(Message message) {
+  public static EventManager inInsertMessage(Message message) {
     EventManager e = new EventManager();
     e.transmittedMessage = message.message;
     e.sourceId = message.originId;
@@ -63,7 +62,6 @@ public class EventManager {
     e.eventType = EventType.IN_INSERT_MESSAGE;
     return e;
   }
-  
   
   public static EventManager outInsertMessage(String sourceID, String destID, String message) {
     EventManager e = new EventManager();
@@ -89,17 +87,30 @@ public class EventManager {
     return e;
   }
 
-
+  public static EventManager inSetNodePromiscuity(String id, boolean isPromiscuous) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.IN_SET_NODE_PROMISCUITY;
+    e.isPromiscuous = isPromiscuous;
+    e.nodeId = id;
+    return e;
+  }
   
   public static EventManager outAddNode(NodeAttributes n) {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_ADD_NODE;
     d.setNodeAttributes(n);
-    d.informationalMessage = "Node Routing Table Displayed: " + n.id + ".";
+    d.informationalMessage = "Added Node : " + n.id + ".";
     return d;
-    
   }
-
+  
+  public static EventManager outDisplayNode(NodeAttributes n) {
+    EventManager d = new EventManager();
+    d.eventType = EventType.OUT_DISPLAY_NODE;
+    d.setNodeAttributes(n);
+    d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ".";
+    return d;
+  }
+  
   public static EventManager outDeleteNode(String id) {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEL_NODE;
@@ -107,7 +118,6 @@ public class EventManager {
     d.informationalMessage = "Node Deleted: " + id;
     return d;
   }
-
 
   public static EventManager outMsgRecieved(String sourceId, String destId, String message) {
     EventManager e = new EventManager();
@@ -129,15 +139,13 @@ public class EventManager {
     return e;
   }
   
-
-
   public static EventManager outError(String informationalMessage) {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_ERROR;
     d.informationalMessage = informationalMessage;
     return d;
   }
-
+  
   public static EventManager outDebug(String informationalMessage) {
     
     EventManager d = new EventManager();
@@ -190,8 +198,7 @@ public class EventManager {
     d.informationalMessage = d.sourceId + " received narrative message from " + d.destinationId + " : " + msg.message;
     return d;
   }
-  
-  
+   
   public static EventManager outNodeInfo(String infoMsg) {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_NODE_INFO;
@@ -283,8 +290,6 @@ public class EventManager {
     return null;
   }
 
-    
-  
   public static EventManager parseLogString(String lineEvent) {
     EventManager e = new EventManager();
     try

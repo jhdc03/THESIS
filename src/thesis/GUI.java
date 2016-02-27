@@ -40,13 +40,8 @@ public class GUI extends JFrame implements OutputConsumer {
         }
     });
 
-
-    
-    // Setup a new layout for the outermost part of the frame. We'll use the
-    // border layout.
     this.setLayout(new BorderLayout());
-
-    JPanel subpanel = new JPanel();  
+    JPanel subpanel = new JPanel();
     this.add(subpanel, BorderLayout.CENTER);
     subpanel.setLayout(new BorderLayout());
 
@@ -90,13 +85,20 @@ public class GUI extends JFrame implements OutputConsumer {
     raisedBevel = BorderFactory.createRaisedBevelBorder();
     loweredBevel = BorderFactory.createLoweredBevelBorder();
     compound = BorderFactory.createCompoundBorder(raisedBevel, loweredBevel);
+
   }
 
-  private void coupleComponents() { }
+  private void coupleComponents() {
+
+  }
 
   public void setNodeInspector(NodeInspector ni) {
     // Give it to the nodeAttributesArea instance
     nodeAttributesArea.setNodeInspector(ni);
+  }
+  
+  public void test(){
+
   }
    
   public void consumeOutput(EventManager e) {
@@ -118,10 +120,15 @@ switch (e.eventType) {
       case OUT_ADD_NODE:
         nodeAttributesArea.nodeAdded(e.nodeId);
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
+        break;
+        
+      case OUT_DISPLAY_NODE:
+        nodeAttributesArea.nodeAdded(e.nodeId);
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         //test
         nodeAttributesArea.openNodeDialog(e.nodeId);
         break;
-
+        
     
       case OUT_MSG_RECEIVED:
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
@@ -141,7 +148,7 @@ switch (e.eventType) {
         //simArea.traceMessage(e.sourceId, e.destinationId, Defaults.NARRMSG_COLOR, 5, Defaults.NARRMSG_THICKNESS, 1);
         logArea.appendLog("NODE INFO" , e.informationalMessage, e.time);
         break;
-
+        
       case OUT_CONTROLMSG_TRANSMITTED:
         //If the destination is BROADCAST, animate it.
         if(e.destinationId.equals(Message.BCAST_STRING)){
@@ -167,6 +174,7 @@ switch (e.eventType) {
         break;
         
       case OUT_QUANTUM_ELAPSED:
+        //menuArea.quantumElapsed();
         nodeAttributesArea.updateNodeDialogs();
         break;
 

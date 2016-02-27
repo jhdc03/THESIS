@@ -17,8 +17,12 @@ import javax.swing.text.Document;
 
 public class LogArea extends javax.swing.JPanel {
 
+  /**
+   * 
+   */
 
-  private static final StringBuilder sb = new StringBuilder(Defaults.LOG_AREA_BUF_SIZE);
+  private static final StringBuilder sb = new StringBuilder(
+                                            Defaults.LOG_AREA_BUF_SIZE);
 
   private class Appender extends Thread {
     public void run() {
@@ -79,13 +83,18 @@ public class LogArea extends javax.swing.JPanel {
   }
 
   private static final long           serialVersionUID = 1L;
-  public static String                newline          = System.getProperty("line.separator");
+  public static String                newline          = System
+                                                           .getProperty("line.separator");
+
+  /**
+   * Debug flag to determine whether or not to show debug messages in the log.
+   */
   private LinkedBlockingQueue<String> lines            = new LinkedBlockingQueue<String>();
 
   public void appendLog(String logType, String log, long quantum) {
 
     // Construct the log line
-    String line = (Utilities.timeStamp() + " Q" + quantum + " : " + logType
+    String line = ("Simulation Time :"  + quantum + " : " + logType
         + " : " + log + "\n");
     synchronized (lines) {
       lines.add(line);

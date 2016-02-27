@@ -3,10 +3,12 @@ package thesis;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class NodeStore { 
+public class NodeStore {
+   
 
 // Hash map of nodes.
 private HashMap<String, Node> store = new HashMap<String, Node>();
+
 
 public NodeAttributes getNodeAttributes(String nodeId) {
    Node node = store.get(nodeId);
@@ -20,6 +22,7 @@ public NodeAttributes getNodeAttributes(String nodeId) {
 public void clear() {
    store.clear();
 }
+
 
 public Node getNode(String nodeId) {
   return store.get(nodeId);

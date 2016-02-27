@@ -1,6 +1,7 @@
 
 package thesis;
 
+
 class ListQueue extends OrderedSet {
     
 java.util.Vector elements = new java.util.Vector();

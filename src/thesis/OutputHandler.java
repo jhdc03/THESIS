@@ -19,22 +19,9 @@ public class OutputHandler {
   }
 
   public static void dispatch(EventManager e) {
-    //Apply event filter
-    if(filteredEvents.contains(e.eventType)) {
-      return;
-    }
     for (OutputConsumer c : consumers) {
       c.consumeOutput(e);
     }
   }
   
-  private static final HashSet<EventManager.EventType> filteredEvents = new HashSet<EventManager.EventType>();
-  public static void addFilteredEvent(EventManager.EventType eType) {
-    filteredEvents.add(eType);
-  }
-  
-  public static void removeFilteredEvent(EventManager.EventType eType) {
-    filteredEvents.remove(eType);
-  }
-
 }
