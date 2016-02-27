@@ -1,15 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
-
-/**
- *
- * @author harve
- */
-
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,36 +9,19 @@ import java.util.HashSet;
 
 // Exceptions
 import java.util.NoSuchElementException;
-//import java.lang.IllegalStateException;
 
 import javax.swing.JDialog;
 import thesis.RouteEntry.StateFlags;
 
 
-/**
- * AODV Node Class.
- * 
- * @author kresss
- * 
- */
 public class AODV extends Node {
 
-  /**
-   * Constructor
-   */
+
   public AODV(NodeAttributes atts) {
     super(atts);
   }
   
-  /**
-   * Hidden no-argument constructor.
-   */
   private AODV() { super(null); };
-  
-  
-  /**
-   * Private Types that are needed for AODV
-   */
 
   /**
    * Constants needed by the AODV Protocol
@@ -65,35 +38,9 @@ public class AODV extends Node {
   public static final int ACTIVE_ROUTE_TIMEOUT = 75;
   public static final int MY_ROUTE_TIMEOUT     = 2 * ACTIVE_ROUTE_TIMEOUT;
 
-  /**
-   * How often to send Hello Messages.
-   * 
-   * Hello_Interval is in the number of 'ticks'.
-   * 
-   * The value (25) for Hello_Interval is derived from the original 1000
-   * millisecond hello interval specifed in RFC 3561 divided by the node
-   * traversal time in the RFC.
-   * 
-   */
-  public static final int HELLO_INTERVAL       = 25;                      // Ticks
 
-  /*
-   * Functions that define the org.dars.proto.node interface.
-   */
+  public static final int HELLO_INTERVAL       = 25;
 
-  /**
-   * Pop a message of the node's transmit queue and return it.
-   * 
-   * This function is used to return a message off the transmit queue of a node
-   * and return it for the simulation engine to consume. Effectively this is
-   * used to simulate the transmittal of a message into the network.
-   * 
-   * @author kresss
-   * @see dars.node.proto.node.messageToNetwork
-   * 
-   * @return Message Message that is being sent into the network. If there are
-   *         no more messages Null is returned.
-   */
 
   public Message messageToNetwork() {
 
@@ -108,20 +55,6 @@ public class AODV extends Node {
     return (Msg);
   }
 
-  /**
-   * Push a message into the node's receive queue.
-   * 
-   * This function is used to deliver a message to a node. The message will be
-   * placed into the nodes receive queue effectively the node is receiving the
-   * message.
-   * 
-   * @author kresss
-   * @see dars.node.proto.node.messageToNode
-   * 
-   * @param message
-   *          Message to be delivered to the node.
-   * 
-   */
   public void messageToNode(Message message) {
 
     try {
@@ -135,17 +68,6 @@ public class AODV extends Node {
 
   }
 
-  /**
-   * Send a narrative message from one node to another.
-   * 
-   * Narrative messages are messages that the user inits.
-   * 
-   * @author kresss
-   * 
-   * @param srcID
-   * @param destID
-   * @param messageText
-   */
   public void newNarrativeMessage(String srcID, String destID,
       String messageText) {
 
@@ -156,28 +78,16 @@ public class AODV extends Node {
      * 
      */
 
-    /**
-     * The message that will be sent.
-     */
     Message Msg;
 
-    /**
-     * MsgStr will hold the message that is sent into the network.
-     */
     String MsgStr = "";
 
-    /**
-     * Message Properties
-     */
     String MsgType = "NARR";
     String MsgFlags = "";
     int MsgTTL = 0;
     String MsgOrigID = srcID;
     String MsgDestID = destID;
 
-    /**
-     * Route Table Entry used to get the destination ID info in our Route Table.
-     */
     RouteEntry DestEntry;
     
     /**
@@ -256,9 +166,7 @@ public class AODV extends Node {
 
   
   /*
-   * Functions that extend the org.dars.proto.node interface to make it unique
-   * to aodv.
-   */
+
 
   /**
    * Place message into the transmit queue.
@@ -266,7 +174,6 @@ public class AODV extends Node {
    * This function sends a message into the network by adding it to the transmit
    * queue.
    * 
-   * @author kresss
    * 
    * @param message
    *          Message to be transmitted.
@@ -293,13 +200,6 @@ public class AODV extends Node {
        */
       MsgType = message.message.split("\\|")[0];
 
-      // TODO: Replace this terrible list of if statements with a switch
-      // statement once Java 7 is released. Java 7 supposedly has the ability
-      // to switch on strings.
-
-      /**
-       * Switch on the Message type to send the DARS in events.
-       */
       if (MsgType.equals("RREQ")) {
         OutputHandler.dispatch(EventManager.outControlMsgTransmitted(this.att.id, message));
         return;
@@ -328,8 +228,6 @@ public class AODV extends Node {
    * This function receives a message from the network by removing it from the
    * receive queue for processing.
    * 
-   * @author kresss
-   * 
    * @param message
    *          The message the is being received from the network.
    */
@@ -353,9 +251,6 @@ public class AODV extends Node {
      */
     MsgType = message.message.split("\\|")[0];
 
-    // TODO: Replace this terrible list of if statements with a switch statement
-    // once Java 7 is released. Java 7 supposedly has the ability to switch on
-    // strings.
 
     if (MsgType.equals("RREQ")) {
       receiveRREQ(message);
@@ -387,8 +282,6 @@ public class AODV extends Node {
    * Generate and send a Route Request Message.
    * 
    * Send a route request message as defined by RFC 3561 Section 5.1
-   * 
-   * @author kresss
    * 
    * @param DestNodeID
    *          The Node ID for the destination that a route is needed for.
@@ -501,8 +394,6 @@ public class AODV extends Node {
    * Receive and decode a Route Request Message.
    * 
    * Decode a Route Request Message as defined by RFC 3561 Section 5.2
-   * 
-   * @author kresss
    * 
    * @param message
    *          The Route Request message that was received.
@@ -619,7 +510,6 @@ public class AODV extends Node {
      * First add the sending node into our Route Table if it is not already
      * there.
      * 
-     * RFC 3561 Section 6.5 Paragraph 1
      */
     DestEntry = RouteTable.get(message.originId);
     if (DestEntry == null) {
@@ -753,8 +643,6 @@ public class AODV extends Node {
    * Invalidate the RouteEntry for DestNodeID and any other entries that use
    * that entry for their next hop.
    * 
-   * @author kresss
-   * 
    * @param DestNodeID
    *          The Destination Node ID for the node that is no longer reachable.
    */
@@ -850,7 +738,6 @@ public class AODV extends Node {
   /**
    * Receive a Route Error Message.
    * 
-   * @author kresss
    * 
    * @param message
    *          The Route Error Message that was received.
@@ -919,19 +806,11 @@ public class AODV extends Node {
    * 
    * Send a route ack message as defined by RFC 3561 Section 5.4
    * 
-   * @author kresss
    */
-  void sendRREPACK() {
-    // TODO: Don't think RREP ACK messages will be needed for the initial
-    // implementation of DARS. RREP ACK's are requested if there is an
-    // expectation of unidirectional links. Not so much in the problem domain
-    // for initial releases of DARS.
-  }
 
   /**
    * Send a Route Reply Message
    * 
-   * @author kresss
    * 
    * @param DestNodeID
    *          The node that the RREQ was made for.
@@ -1078,14 +957,9 @@ public class AODV extends Node {
   /**
    * Receive a Route Reply Message
    * 
-   * @author kresss
    */
   
-  /**
-   * Receive a Route Reply Message
-   * 
-   * @author kresss
-   */
+
   void receiveRREP(Message message) {
 
     /**
@@ -1370,7 +1244,6 @@ public class AODV extends Node {
    * 
    * This function will broadcast a hello message if it is time.
    * 
-   * @author kresss
    */
   void sendHello() {
 
@@ -1436,7 +1309,6 @@ public class AODV extends Node {
   /**
    * Receive Narrative Message.
    * 
-   * @author kresss
    * 
    * @param message
    *          Narrative message received from network.
@@ -1577,8 +1449,6 @@ public class AODV extends Node {
    * Add a message (normally a narrative) onto the wait queue for later
    * processing.
    * 
-   * @author kresss
-   * 
    * @param srcID
    * @param destID
    * @param msgStr
@@ -1605,8 +1475,6 @@ public class AODV extends Node {
 
   /**
    * Check all message in the wait queue and see if we can send them.
-   * 
-   * @author kresss
    */
   private void processWaitQueue() {
 
@@ -1673,7 +1541,6 @@ public class AODV extends Node {
   /**
    * Check all routes in the Route Table for stale routes.
    * 
-   * @author kresss
    */
   private void checkRouteTable() {
 
@@ -1725,7 +1592,6 @@ public class AODV extends Node {
    * 
    * This will do all the processing for a node's time interval.
    * 
-   * @author kresss
    */
   public void clockTick() {
 

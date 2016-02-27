@@ -5,10 +5,7 @@
  */
 package thesis;
 
-/**
- *
- * @author harve
- */
+
 
 public interface SimTime {
   long getTime();

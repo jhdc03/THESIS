@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
 import java.util.HashMap;
 import java.util.Iterator;
-/**
- *
- * @author harve
- */
+
 public class NodeStore {
    
 
@@ -41,8 +34,6 @@ public Node getNode(String nodeId) {
  * 
  * This function will add a node to the to the NodeStore. *
  * 
- * @author kennylmay
- * 
  * @param node
  */
 
@@ -55,7 +46,6 @@ public void addNode(Node node) {
  * 
  * This function will delete a node from the to the NodeStore.
  * 
- * @author kennylmay
  * 
  * @param name
  */

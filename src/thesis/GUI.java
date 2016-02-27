@@ -126,7 +126,6 @@ public class GUI extends JFrame implements OutputConsumer {
    
   public void consumeOutput(EventManager e) {
     // schedule the event to be processed later so as to not disturb the gui's
-    // event thread
 switch (e.eventType) {
     
         /*case ADD_MESSAGE:

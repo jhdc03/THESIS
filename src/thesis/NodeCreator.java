@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
 
 import thesis.Node;
 
-/**
- *
- * @author harve
- */
+
 public class NodeCreator {
     
   // Add the protocol Name to the Enumeration

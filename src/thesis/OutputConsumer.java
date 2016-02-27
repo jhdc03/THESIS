@@ -5,10 +5,7 @@
  */
 package thesis;
 
-/**
- *
- * @author harve
- */
+
 public interface OutputConsumer {
    public void consumeOutput(EventManager e);
 }

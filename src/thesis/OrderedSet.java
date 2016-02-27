@@ -5,10 +5,7 @@
  */
 package thesis;
 
-/**
- *
- * @author harve
- */
+
 abstract class OrderedSet {
     abstract void insert(Comparable x);
     abstract Comparable  removeFirst();

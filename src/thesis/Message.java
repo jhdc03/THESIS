@@ -5,10 +5,7 @@
  */
 package thesis;
 
-/**
- *
- * @author harve
- */
+
 public class Message {
     
    public String message;
@@ -31,8 +28,6 @@ public class Message {
     * Broadcast Destination ID
     * 
     * A Destination ID that is set to this string will be assumed to be a broadcast message.
-    * 
-    * @author kresss
     */
    public static final String BCAST_STRING = "BROADCAST";
    

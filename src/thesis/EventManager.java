@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
 
 import java.lang.reflect.Field;
 import thesis.NodeCreator.NodeType;
 
-/**
- *
- * @author harve
- */
 public class EventManager {
     private static String newline = System.getProperty("line.separator");
   public enum EventType {
@@ -58,8 +50,6 @@ public class EventManager {
     simTime = s;
   }
   
-  // Hide the default constructor. DARSEvents can only be made through the
-  // supplied functions that follow.
   public EventManager() {
     //If the time keeper is set, view the current time from it.
     if(simTime != null) {
@@ -84,34 +74,6 @@ public class EventManager {
     return e;
   }
   
-  public static EventManager inNewSim(NodeType nt) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.IN_NEW_SIM;
-    e.nodeType = nt;
-    return e;
-  }
-  
-  public static EventManager outClearSim() {
-    EventManager e = new EventManager();
-    e.eventType = EventType.OUT_CLEAR_SIM;
-    e.informationalMessage = "Nodes cleared.";
-    return e;
-  }
-  
-  public static EventManager inStartSim() {
-    EventManager e = new EventManager();
-    e.eventType = EventType.IN_START_SIM;
-    return e;
-  }
-
-  public static EventManager outStartSim() {
-    EventManager e = new EventManager();
-    e.eventType = EventType.OUT_START_SIM;
-    e.informationalMessage = "Simulation Started.";
-    return e;
-  }
-  
-    
   public static EventManager inAddNode(int x, int y, int range, boolean isPromiscuous) {
     EventManager e = new EventManager();
     e.eventType = EventType.IN_ADD_NODE;
@@ -340,11 +302,9 @@ public class EventManager {
         }
       } catch (IllegalArgumentException e) {
         e.printStackTrace();
-        Utilities.showError("An error occurred while trying to serialize an event. Please file a bug report");
         System.exit(1);
       } catch (IllegalAccessException e) {
         e.printStackTrace();
-        Utilities.showError("An error occurred while trying to serialize an event. Please file a bug report");
         System.exit(1);
       }
 

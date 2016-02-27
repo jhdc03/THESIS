@@ -1,10 +1,7 @@
 package thesis;
 
 
-/**
- *
- * @author harve
- */
+
 public class WaitQueueEntry {
     
 
@@ -17,7 +14,6 @@ public class WaitQueueEntry {
   /**
    * Constructor with all fields defined.
    * 
-   * @author kresss
    * 
    * @param sourceID
    * @param destinationID

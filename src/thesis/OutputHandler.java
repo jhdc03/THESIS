@@ -1,20 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-/**
- *
- * @author harve
- */
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
 
 public class OutputHandler {
 
   // List of consumers
-  private static CopyOnWriteArrayList<OutputConsumer> consumers = new CopyOnWriteArrayList<OutputConsumer>();
+  private static ArrayList<OutputConsumer> consumers = new ArrayList<OutputConsumer>();
 
   public static void removeOutputConsumer(OutputConsumer c) {
     consumers.remove(c);
@@ -34,7 +28,7 @@ public class OutputHandler {
     }
   }
   
-  private static final CopyOnWriteArraySet<EventManager.EventType> filteredEvents = new CopyOnWriteArraySet<EventManager.EventType>();
+  private static final HashSet<EventManager.EventType> filteredEvents = new HashSet<EventManager.EventType>();
   public static void addFilteredEvent(EventManager.EventType eType) {
     filteredEvents.add(eType);
   }

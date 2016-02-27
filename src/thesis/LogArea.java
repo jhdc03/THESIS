@@ -1,17 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
 
-/**
- *
- * @author harve
- */
-/**
- * 
- */
 
 import java.awt.BorderLayout;
 import java.util.Iterator;
@@ -26,10 +15,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 
-/**
- * @author Mike
- * 
- */
 public class LogArea extends javax.swing.JPanel {
 
   /**
@@ -88,7 +73,6 @@ public class LogArea extends javax.swing.JPanel {
           // Move the caret to chase the log as it grows downward
           textArea.setCaretPosition(textArea.getDocument().getLength());
         } catch (Exception e) {
-          Utilities.showError("An error occurred while trying to append to the console. Please file a bug report.");
           System.exit(1);
         }
         
@@ -133,8 +117,6 @@ public class LogArea extends javax.swing.JPanel {
             0,
             textArea.getLineEndOffset(textArea.getLineOfOffset( Math.min(doc.getLength(), overLength))));
       } catch (BadLocationException e) {
-        Utilities
-            .showError("An error occurred while truncating the buffer in the LogArea. Please file a bug report.");
         System.exit(1);
       }
     }

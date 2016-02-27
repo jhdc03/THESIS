@@ -5,10 +5,7 @@
  */
 package thesis;
 
-/**
- *
- * @author harve
- */
+
 public class SimulitorMain {
     
     public SimulitorMain(){}
@@ -18,8 +15,6 @@ public class SimulitorMain {
    
     
     public static void main(String[] args) {
-        //InputHandler.addInputConsumer(Logger.getInstance());
-        //OutputHandler.addOutputConsumer(Logger.getInstance());
         // Instantiate the simulator engine
         SimEngine s = new SimEngine();
         

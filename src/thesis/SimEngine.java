@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package thesis;
 
 import java.awt.Point;
@@ -13,10 +9,7 @@ import java.util.Random;
 import javax.swing.JDialog;
 import thesis.NodeCreator.NodeType;
 
-/**
- *
- * @author harve
- */
+
 public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
     /**
@@ -24,7 +17,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
      */
     private long time = 0;
     private int WAIT_TIME = 10;
-    private boolean KILL_THREAD = false;
     NodeStore store = new NodeStore();
     Queue<Message> messageQueue = new LinkedList<Message>();
     Queue<Message> newMessages = new LinkedList<Message>();
@@ -52,25 +44,13 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         throw new java.lang.RuntimeException("Method not implemented");
     }
 
-    public void Init() {
-        NodeType nt = NodeType.AODV;
-        if (nt == null) {
-            //User canceled..
-            return;
-        }
-
-        //Start a new simualation
-        InputHandler.dispatch(EventManager.inNewSim(nt));
-    }
 
     /////////////////////////////////////////////////////////////
     //USEFULL Stuff
     /*
         //add single node
-        InputHandler.dispatch(DARSEvent.inAddNode(Defaults.X,Defaults.Y,Defaults.RANGE, Defaults.IS_PROMISCUOUS));
-      
-        //delete node
-        InputHandler.dispatch(DARSEvent.inDeleteNode(selectedNode));
+        InputHandler.dispatch(EventManager.inAddNode(Defaults.X,Defaults.Y,Defaults.RANGE, Defaults.IS_PROMISCUOUS));
+
     */
         //add multiple nodes
    
@@ -95,7 +75,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
     
     
     public void start() {
-        Init();
         AddMultipleNodes();
         
         EventQueue = new ListQueue();
@@ -214,14 +193,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
     
   }
   
-    /**
-     * This function will provide a way to determine the type of even that is
-     * issued and make a decision as to what to do with the event.
-     *
-     *
-     * @param DARSEvnt
-     *
-     */
+
     public void consumeInput(EventManager e) {
         Node n;
 
@@ -353,7 +325,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
      * algorithm (or any other digit). It cheats a bit because there is no
      * "zero" digit in the ID assigning scheme (Just A-Z).
      *
-     * @ author Mike
      *
      */
     private String assignNodeId() {
