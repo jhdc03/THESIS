@@ -13,11 +13,8 @@ public abstract class Node{
     this.setAttributes(atts);
   }
 
-  /**
-   * **************************************************************************
-   * *** Abstract methods that must be implemented to define a new protocol.
-   * **************************************************************************
-   */
+  //Abstract methods that must be implemented to define a new protocol.
+
 
   public abstract Message messageToNetwork();
   

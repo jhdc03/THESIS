@@ -6,31 +6,15 @@
 package thesis;
 
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Vector;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 
 public class NodeAttributesArea extends JPanel {
 
-  private JComboBox                nodeSelectorComboBox    = new JComboBox();
-  private JButton                  nodeAttributesButton    = new JButton("Attributes");
-  private JCheckBox                promiscuousModeCheckBox = new JCheckBox("Promiscous Mode");
   private Vector<String>           nodeList                = new Vector<String>();
   private HashMap<String, JDialog> openNodeDialogs         = new HashMap<String, JDialog>();
 
@@ -43,7 +27,6 @@ public class NodeAttributesArea extends JPanel {
             dialog);*/
 
   public void nodeAdded(String nodeId) {
-    nodeSelectorComboBox.addItem(nodeId);
     nodeList.add(nodeId);
   }
 

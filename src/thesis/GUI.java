@@ -17,7 +17,6 @@ public class GUI extends JFrame implements OutputConsumer {
    */
   private static final long  serialVersionUID    = 1L;
   private JPanel             logPanel            = new JPanel();
-
   private LogArea            logArea             = new LogArea();
   private NodeAttributesArea nodeAttributesArea  = new NodeAttributesArea();
 
@@ -47,25 +46,8 @@ public class GUI extends JFrame implements OutputConsumer {
     // border layout.
     this.setLayout(new BorderLayout());
 
-    
-    
-    // Allocate as follows:
-    /*
-     * _________________ | | | | | | | CENTER | <-|-- EAST | | | | | |
-     * |_____________|___|
-     */
-    // Add a center panel, this will serve us merely in a layout capacity.
-    JPanel subpanel = new JPanel();
-   
-    
+    JPanel subpanel = new JPanel();  
     this.add(subpanel, BorderLayout.CENTER);
-
-
-    /*
-     * Elaborate upon the layout of the subpanel. Do this: ______________ | | |
-     * | | CENTER | |_____________| | | |__SOUTH______|
-     */
-    // Use another borderlayout for the subpanel.
     subpanel.setLayout(new BorderLayout());
 
 
@@ -108,20 +90,13 @@ public class GUI extends JFrame implements OutputConsumer {
     raisedBevel = BorderFactory.createRaisedBevelBorder();
     loweredBevel = BorderFactory.createLoweredBevelBorder();
     compound = BorderFactory.createCompoundBorder(raisedBevel, loweredBevel);
-
   }
 
-  private void coupleComponents() {
-
-  }
+  private void coupleComponents() { }
 
   public void setNodeInspector(NodeInspector ni) {
     // Give it to the nodeAttributesArea instance
     nodeAttributesArea.setNodeInspector(ni);
-  }
-  
-  public void test(){
-
   }
    
   public void consumeOutput(EventManager e) {
@@ -167,8 +142,6 @@ switch (e.eventType) {
         logArea.appendLog("NODE INFO" , e.informationalMessage, e.time);
         break;
 
-      
-      case OUT_NARRMSG_TRANSMITTED:
       case OUT_CONTROLMSG_TRANSMITTED:
         //If the destination is BROADCAST, animate it.
         if(e.destinationId.equals(Message.BCAST_STRING)){
@@ -176,7 +149,6 @@ switch (e.eventType) {
           logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         }
         break;
-        
         
       case OUT_CONTROLMSG_RECEIVED:
         // Animate the event
@@ -195,7 +167,6 @@ switch (e.eventType) {
         break;
         
       case OUT_QUANTUM_ELAPSED:
-        //menuArea.quantumElapsed();
         nodeAttributesArea.updateNodeDialogs();
         break;
 

@@ -8,15 +8,13 @@ public class EventManager {
     private static String newline = System.getProperty("line.separator");
   public enum EventType {
     // Input event types
-    IN_ADD_NODE, IN_MOVE_NODE, IN_DEL_NODE, IN_SET_NODE_RANGE, IN_SET_NODE_PROMISCUITY, IN_SIM_SPEED, 
-    IN_START_SIM, IN_PAUSE_SIM, IN_RESUME_SIM, IN_STOP_SIM, IN_CLEAR_SIM, IN_NEW_SIM, IN_INSERT_MESSAGE,
+    IN_ADD_NODE, IN_MOVE_NODE, IN_DEL_NODE, IN_SET_NODE_RANGE, IN_SET_NODE_PROMISCUITY, IN_INSERT_MESSAGE,
     
     // Output event types
     OUT_ADD_NODE, OUT_MOVE_NODE, OUT_DEL_NODE, OUT_SET_NODE_RANGE, OUT_SET_NODE_PROMISCUITY,  
-    OUT_MSG_TRANSMITTED,  OUT_DEBUG, OUT_ERROR, OUT_START_SIM, OUT_PAUSE_SIM, OUT_RESUME_SIM, 
-    OUT_STOP_SIM, OUT_SIM_SPEED, OUT_NEW_SIM, OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
+    OUT_MSG_TRANSMITTED,  OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
     OUT_CONTROLMSG_RECEIVED, OUT_NARRMSG_TRANSMITTED, OUT_CONTROLMSG_TRANSMITTED, 
-    OUT_QUANTUM_ELAPSED, OUT_CLEAR_SIM, OUT_MSG_RECEIVED, OUT_NODE_INFO
+    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO
   };
   
   public EventType            eventType;
@@ -91,31 +89,6 @@ public class EventManager {
     return e;
   }
 
-  public static EventManager inSetNodeRange(String id, int newRange) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.IN_SET_NODE_RANGE;
-    e.nodeId = id;
-    e.nodeRange = newRange;
-    return e;
-  }
-  
-
-  public static EventManager inSetNodePromiscuity(String id, boolean isPromiscuous) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.IN_SET_NODE_PROMISCUITY;
-    e.isPromiscuous = isPromiscuous;
-    e.nodeId = id;
-    return e;
-  }
-  
-  public static EventManager inMoveNode(String id, int x, int y) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.IN_MOVE_NODE;
-    e.nodeId = id;
-    e.nodeX = x;
-    e.nodeY = y;
-    return e;
-  }
 
   
   public static EventManager outAddNode(NodeAttributes n) {
@@ -127,16 +100,6 @@ public class EventManager {
     
   }
 
-  public static EventManager outMoveNode(String id, int x, int y) {
-    EventManager d = new EventManager();
-    d.eventType = EventType.OUT_MOVE_NODE;
-    d.nodeId = id;
-    d.nodeX = x;
-    d.nodeY = y;
-    d.informationalMessage = "Node " + id + " moved to X:" + x +" Y:" + y + ".";
-    return d;
-  }
-
   public static EventManager outDeleteNode(String id) {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEL_NODE;
@@ -145,25 +108,7 @@ public class EventManager {
     return d;
   }
 
-  public static EventManager outSetNodeRange(String id, int newRange) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.OUT_SET_NODE_RANGE;
-    e.nodeId = id;
-    e.nodeRange = newRange;
-    e.informationalMessage = "Node " + id + "'s range changed to " + newRange + ".";
-    return e;
-  }
 
-  public static EventManager outSetNodePromiscuity(String id, boolean isPromiscuous) {
-    EventManager e = new EventManager();
-    e.eventType = EventType.OUT_SET_NODE_PROMISCUITY;
-    e.isPromiscuous = isPromiscuous;
-    String status;
-    if(isPromiscuous) status = "enabled";
-    else status = "disabled";
-    e.informationalMessage = "Node " + id + " " + status + " promiscuous mode.";
-    return e;
-  }
   public static EventManager outMsgRecieved(String sourceId, String destId, String message) {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_MSG_RECEIVED;

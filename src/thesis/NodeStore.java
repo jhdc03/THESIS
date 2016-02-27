@@ -3,12 +3,10 @@ package thesis;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class NodeStore {
-   
+public class NodeStore { 
 
 // Hash map of nodes.
 private HashMap<String, Node> store = new HashMap<String, Node>();
-
 
 public NodeAttributes getNodeAttributes(String nodeId) {
    Node node = store.get(nodeId);
@@ -23,32 +21,15 @@ public void clear() {
    store.clear();
 }
 
-
 public Node getNode(String nodeId) {
   return store.get(nodeId);
   
 }
 
-/**
- * Function will be add a Node to the NodeStore.
- * 
- * This function will add a node to the to the NodeStore. *
- * 
- * @param node
- */
-
 public void addNode(Node node) {
       store.put(node.getAttributes().id, node);
 }
 
-/**
- * Function will be delete a Node from the NodeStore.
- * 
- * This function will delete a node from the to the NodeStore.
- * 
- * 
- * @param name
- */
 public boolean deleteNode(String id) {
    return (store.remove(id) != null);
 }

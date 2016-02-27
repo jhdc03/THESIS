@@ -245,47 +245,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 }
                 break;
 
-            case IN_SET_NODE_RANGE:
-                // Get the node
-                n = store.getNode(e.nodeId);
-                if (n == null) {
-                    OutputHandler.dispatch(EventManager.outError("Could not set range for node " + e.nodeId + ", node does not exist"));
-                    return;
-                }
-
-                // Set the new range
-                n.setRange(e.nodeRange);
-                OutputHandler.dispatch(EventManager.outSetNodeRange(e.nodeId, e.nodeRange));
-                break;
-
-            case IN_SET_NODE_PROMISCUITY:
-                //Get the node
-                n = store.getNode(e.nodeId);
-                if (n == null) {
-                    OutputHandler.dispatch(EventManager.outError("Could not set promsicuity for node " + e.nodeId + ", node does not exist"));
-                    return;
-                }
-                // Set the new promiscuity level
-                n.setPromiscuity(e.isPromiscuous);
-                OutputHandler.dispatch(EventManager.outSetNodePromiscuity(e.nodeId, e.isPromiscuous));
-                break;
-
-            case IN_MOVE_NODE:
-                // Get the node
-                n = store.getNode(e.nodeId);
-
-                if (n == null) {
-                    OutputHandler.dispatch(EventManager.outError("Could not move node " + e.nodeId + ", node does not exist"));
-                    return;
-                }
-
-                // Set the new coords
-                n.setXY(e.nodeX, e.nodeY);
-
-                // Dispatch the moved event
-                OutputHandler.dispatch(EventManager.outMoveNode(e.nodeId, e.nodeX, e.nodeY));
-                break;
-
             case IN_INSERT_MESSAGE:
                 // Check if the source node exists
                 if (store.getNode(e.sourceId) == null) {
