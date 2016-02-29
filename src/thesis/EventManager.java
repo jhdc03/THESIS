@@ -13,7 +13,7 @@ public class EventManager {
     // Output event types
     OUT_ADD_NODE,OUT_MSG_TRANSMITTED, OUT_DEL_NODE, OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
     OUT_CONTROLMSG_RECEIVED, OUT_NARRMSG_TRANSMITTED, OUT_CONTROLMSG_TRANSMITTED, 
-    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED
+    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED, OUT_SIM_RESULTS
   };
   
   public EventType            eventType;
@@ -25,14 +25,17 @@ public class EventManager {
   public int                  nodeX;
   public int                  nodeY;
   public int                  nodeRange;
-  public double                energy;
+  public int                  totalSent;
+  public int                  totalReceived;
+  public double               energy;
+  public int                  packetDrop;
   public NodeCreator.NodeType nodeType;
   public long                 time;
   public boolean              isPromiscuous;
   
   
   public NodeAttributes getNodeAttributes() {
-    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, energy, isPromiscuous);
+    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, energy, packetDrop, totalSent, totalReceived, isPromiscuous);
   }
   
   public void setNodeAttributes(NodeAttributes n) {
@@ -78,13 +81,15 @@ public class EventManager {
     return d;
   }
   
-  public static EventManager inAddNode(int x, int y, int range, double energy, boolean isPromiscuous) {
+  public static EventManager inAddNode(int x, int y, int range, double energy, double packetDrop, int totalSent, int totalReceived ,boolean isPromiscuous) {
     EventManager e = new EventManager();
     e.eventType = EventType.IN_ADD_NODE;
     e.nodeX = x;
     e.nodeY = y;
     e.nodeRange = range;
     e.energy = energy;
+    e.totalSent=totalSent;
+    e.totalReceived=totalReceived;
     e.isPromiscuous = isPromiscuous;
     return e;
   }
@@ -116,12 +121,22 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DISPLAY_NODE;
     d.setNodeAttributes(n);
-    //double a =java.text.DecimalFormat("0.00").format( n.energy );
-    d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%" ;
+    if (n.totalReceived==0){
+        d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%"
+            + ". No packet ";}
+    else{
+        d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%"
+            + ". Node packetDrop: " + String.format("%.2f", (n.packetDrop/(float)n.totalReceived) * 100) + "%";}
+
     return d;
   }
   
-  
+  public static EventManager outSimResults(String message) {
+    EventManager d = new EventManager();
+    d.eventType = EventType.OUT_SIM_RESULTS;
+    d.informationalMessage = message ;
+    return d;
+  }
   
   public static EventManager outDeleteNode(String id) {
     EventManager d = new EventManager();

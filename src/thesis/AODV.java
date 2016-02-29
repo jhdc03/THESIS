@@ -36,9 +36,9 @@ public class AODV extends Node {
   public static final int ACTIVE_ROUTE_TIMEOUT = 75;
   public static final int MY_ROUTE_TIMEOUT     = 2 * ACTIVE_ROUTE_TIMEOUT;
   public static final int HELLO_INTERVAL       = 25;
-  public boolean recieving = false;
+  public boolean receiving = false;
   public boolean transmitting = false;
-
+  
   public Message messageToNetwork() {
 
     Message Msg;
@@ -189,6 +189,7 @@ public class AODV extends Node {
                     + " Failed to successfully queue message to be sent due to a full transmit queue."));
       }
       transmitting = true;
+      setTotalSent(att.totalSent+1);
       /**
        * Get the message type.
        * 
@@ -239,13 +240,16 @@ public class AODV extends Node {
     if (message.originId.equals(this.att.id)) {
       return;
     }
-    recieving = true;
+    setTotalReceived(att.totalReceived+1);
+    receiving = true;
     Medium m = new Medium();
     if (m.drop()) {
         OutputHandler.dispatch(EventManager.outPacketDropped(message.originId, this.att.id));
-        
+        setpacketDrop(att.packetDrop+1);
       return;
     }
+
+    
     /**
      * Get the message type.
      * 
@@ -1638,14 +1642,14 @@ public class AODV extends Node {
     checkRouteTable();
     if(transmitting == true){
         setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_TRANSMISSION_STATE);
-    } else if (recieving == true ){
+    } else if (receiving == true ){
         setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_RECIEVE_STATE);
     } else {
         setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_IDLE_STATE);}
-      System.out.println(att.id +transmitting+recieving); 
+ 
       
     transmitting = false;
-    recieving = false;
+    receiving = false;
   }
 
   /**

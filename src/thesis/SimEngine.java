@@ -23,7 +23,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
     public void AddMultipleNodes() {
         Random r = new Random();
-        double energy= 100;
         double X = 200;
         double Y = 200;
         int numberOfNodes = 5;
@@ -32,11 +31,13 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
             int range = r.nextInt(400) + 50; // Min range of 50
             int x = r.nextInt((int) X);
             int y = r.nextInt((int) Y);
-            InputHandler.dispatch(EventManager.inAddNode(x, y, range, energy, Defaults.IS_PROMISCUOUS));
+            InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.ENERGY, Defaults.packetDrop, Defaults.TOTALSENT, Defaults.TOTALRECEIVED, Defaults.IS_PROMISCUOUS));
         }
     }
 
     public void start() {
+        int totaldrop=0;
+        int totalreceived=0;
         AddMultipleNodes();
 
         for (int i = 0; i < Defaults.SIM_TIME_END; i++) {
@@ -47,9 +48,11 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         i = store.getNodes();
         while (i.hasNext()) {
             node = i.next();
+            //totaldrop=+node.getAttributes().packetDrop;
+            //totalreceived=+node.getAttributes().totalReceived;
             OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
         }
-
+        //OutputHandler.dispatch(EventManager.outSimResults("Average Packet Drop rate : " + totaldrop/totalreceived));
     }
 
     public void runSimulation() {
@@ -158,7 +161,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
                 String id = assignNodeId();
 
                 // Make a new network node with these attributes
-                ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.energy, ni.isPromiscuous);
+                ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.energy, ni.packetDrop, ni.totalSent, ni.totalReceived, ni.isPromiscuous);
                 n = NodeCreator.makeNewNode(getNodeType(), ni);
                 OutputHandler.dispatch(EventManager.outAddNode(ni));
                 // Add it to the node store

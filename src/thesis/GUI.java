@@ -116,8 +116,9 @@ switch (e.eventType) {
         //test
         nodeAttributesArea.openNodeDialog(e.nodeId);
         break;
-        
-    
+      case OUT_SIM_RESULTS:
+        logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
+        break;  
       case OUT_MSG_RECEIVED:
         logArea.appendLog("SIM INFO" , e.informationalMessage, e.time);
         break;
