@@ -1,14 +1,13 @@
 
 package thesis;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class OutputHandler {
 
   // List of consumers
-  private static ArrayList<OutputConsumer> consumers = new ArrayList<OutputConsumer>();
+  private static CopyOnWriteArrayList<OutputConsumer> consumers = new CopyOnWriteArrayList<OutputConsumer>();
 
   public static void removeOutputConsumer(OutputConsumer c) {
     consumers.remove(c);

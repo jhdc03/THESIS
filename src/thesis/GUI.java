@@ -145,7 +145,9 @@ switch (e.eventType) {
       case OUT_CONTROLMSG_RECEIVED:
         logArea.appendLog("NODE INFO", e.informationalMessage, e.time);
         break;
-
+      case OUT_DEL_NODE:
+        logArea.appendLog("SIM INFO", e.informationalMessage, e.time);
+        break;
       case OUT_DEBUG:
         logArea.appendLog("SIM DEBUG" , e.informationalMessage, e.time);
         break;

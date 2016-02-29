@@ -123,7 +123,7 @@ public class EventManager {
     d.setNodeAttributes(n);
     if (n.totalReceived==0){
         d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%"
-            + ". No packet ";}
+            + ". No packet Received";}
     else{
         d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%"
             + ". Node packetDrop: " + String.format("%.2f", (n.packetDrop/(float)n.totalReceived) * 100) + "%";}
@@ -142,7 +142,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEL_NODE;
     d.nodeId = id;
-    d.informationalMessage = "Node Deleted: " + id;
+    d.informationalMessage = "Node Out of Energy: " + id;
     return d;
   }
 

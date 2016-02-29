@@ -50,6 +50,15 @@ public class NodeAttributesArea extends JPanel {
     return nodeList;
   }
 
+  public void nodeDeleted(String nodeId) {
+    nodeList.remove(nodeId);
+    JDialog jd = openNodeDialogs.get(nodeId);
+    if (jd == null) {
+      return;
+    }
+    openNodeDialogs.remove(nodeId);
+    jd.dispose();
+  }
 
   public void openNodeDialog(String nodeID) {
     // If the node attributes window is already open return

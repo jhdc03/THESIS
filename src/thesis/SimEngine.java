@@ -48,11 +48,11 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         i = store.getNodes();
         while (i.hasNext()) {
             node = i.next();
-            //totaldrop=+node.getAttributes().packetDrop;
-            //totalreceived=+node.getAttributes().totalReceived;
+            totaldrop=+node.getAttributes().packetDrop;
+            totalreceived=+node.getAttributes().totalReceived;
             OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
         }
-        //OutputHandler.dispatch(EventManager.outSimResults("Average Packet Drop rate : " + totaldrop/totalreceived));
+        OutputHandler.dispatch(EventManager.outSimResults("Average Packet Drop rate : " + String.format("%.2f", (totaldrop/(float)totalreceived) * 100)));
     }
 
     public void runSimulation() {
@@ -127,11 +127,13 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         i = store.getNodes();
         while (i.hasNext()) {
             // / Issue a clock tick to each node
-            node = i.next();
+
+               node = i.next();
             if (node == null) {
                 continue;
             }
-            node.clockTick();
+            node.clockTick(); 
+
         }
 
         // Check each node for messages waiting to be sent and gather them up

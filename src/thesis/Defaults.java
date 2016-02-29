@@ -10,7 +10,7 @@ public class Defaults {
   public static final double ENERGY = 100;
   public static final double packetDrop = 0;
   public static final int RANGE = 150;
-  public static final int SIM_TIME_END = 100;
+  public static final int SIM_TIME_END = 10000;
   public static final int TOTALSENT = 0;
   public static final int TOTALRECEIVED = 0;
   public static final String TITLE_STRING = "Wireless Sensor Network Simulator";

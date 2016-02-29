@@ -1,6 +1,6 @@
 
 package thesis;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InputHandler {
   public static void dispatch(EventManager e){
@@ -17,7 +17,7 @@ public class InputHandler {
 	  inputConsumers.remove(c);
   }
   
-  private static final ArrayList<InputConsumer> inputConsumers = new ArrayList<InputConsumer>();
+  private static final CopyOnWriteArrayList<InputConsumer> inputConsumers = new CopyOnWriteArrayList<InputConsumer>();
 
 }
 
