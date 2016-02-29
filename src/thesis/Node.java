@@ -46,6 +46,9 @@ public abstract class Node{
   public boolean isPromiscuous() {
     return this.att.isPromiscuous;
   }
+  public void setEnergy(double energy) {
+    this.att = new NodeAttributes(att.id, att.x, att.y, att.range, energy, att.isPromiscuous);
+  }
 
   public void setPromiscuity(boolean value) {
     this.att = new NodeAttributes(this.att.id, this.att.x, this.att.y, this.att.range, this.att.energy, value);

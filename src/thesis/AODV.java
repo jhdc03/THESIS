@@ -36,7 +36,8 @@ public class AODV extends Node {
   public static final int ACTIVE_ROUTE_TIMEOUT = 75;
   public static final int MY_ROUTE_TIMEOUT     = 2 * ACTIVE_ROUTE_TIMEOUT;
   public static final int HELLO_INTERVAL       = 25;
-
+  public boolean recieving = false;
+  public boolean transmitting = false;
 
   public Message messageToNetwork() {
 
@@ -177,7 +178,7 @@ public class AODV extends Node {
   private void sendMessage(Message message) {
 
     String MsgType;
-
+    
     if (!this.att.isPromiscuous) {
       try {
         txQueue.add(message);
@@ -187,7 +188,7 @@ public class AODV extends Node {
                 .outError(this.att.id
                     + " Failed to successfully queue message to be sent due to a full transmit queue."));
       }
-      
+      transmitting = true;
       /**
        * Get the message type.
        * 
@@ -238,7 +239,7 @@ public class AODV extends Node {
     if (message.originId.equals(this.att.id)) {
       return;
     }
-    
+    recieving = true;
     Medium m = new Medium();
     if (m.drop()) {
         OutputHandler.dispatch(EventManager.outPacketDropped(message.originId, this.att.id));
@@ -1298,7 +1299,7 @@ public class AODV extends Node {
     HelloSentAt = this.CurrentTick;
 
     Msg = new Message(Message.BCAST_STRING, this.att.id, MsgStr);
-
+    transmitting = true;
     /**
      * Place the message into the txQueue.
      */
@@ -1615,6 +1616,8 @@ public class AODV extends Node {
      */
     CurrentTick++;
     
+    
+      
     /**
      * Receive and process each message on the Receive Queue.
      */
@@ -1633,6 +1636,16 @@ public class AODV extends Node {
     sendHello();
     //generateData();
     checkRouteTable();
+    if(transmitting == true){
+        setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_TRANSMISSION_STATE);
+    } else if (recieving == true ){
+        setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_RECIEVE_STATE);
+    } else {
+        setEnergy(att.energy-Defaults.ENERGY_CONSUMPTION_IDLE_STATE);}
+      System.out.println(att.id +transmitting+recieving); 
+      
+    transmitting = false;
+    recieving = false;
   }
 
   /**

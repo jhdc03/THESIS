@@ -12,7 +12,6 @@ public class Medium {
         return used;
     }
 
-
     public boolean drop() {
         float drop = (float) (Math.random() * 100);
         if (drop < Defaults.WIRELESS_MEDIUM_RELIABILITY) // 0-79

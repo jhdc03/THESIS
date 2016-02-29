@@ -25,7 +25,7 @@ public class EventManager {
   public int                  nodeX;
   public int                  nodeY;
   public int                  nodeRange;
-  public float                energy;
+  public double                energy;
   public NodeCreator.NodeType nodeType;
   public long                 time;
   public boolean              isPromiscuous;
@@ -78,12 +78,13 @@ public class EventManager {
     return d;
   }
   
-  public static EventManager inAddNode(int x, int y, int range, boolean isPromiscuous) {
+  public static EventManager inAddNode(int x, int y, int range, double energy, boolean isPromiscuous) {
     EventManager e = new EventManager();
     e.eventType = EventType.IN_ADD_NODE;
     e.nodeX = x;
     e.nodeY = y;
     e.nodeRange = range;
+    e.energy = energy;
     e.isPromiscuous = isPromiscuous;
     return e;
   }
@@ -115,7 +116,8 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DISPLAY_NODE;
     d.setNodeAttributes(n);
-    d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ".";
+    //double a =java.text.DecimalFormat("0.00").format( n.energy );
+    d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%" ;
     return d;
   }
   

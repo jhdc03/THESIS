@@ -23,6 +23,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
     public void AddMultipleNodes() {
         Random r = new Random();
+        double energy= 100;
         double X = 200;
         double Y = 200;
         int numberOfNodes = 5;
@@ -31,7 +32,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
             int range = r.nextInt(400) + 50; // Min range of 50
             int x = r.nextInt((int) X);
             int y = r.nextInt((int) Y);
-            InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.IS_PROMISCUOUS));
+            InputHandler.dispatch(EventManager.inAddNode(x, y, range, energy, Defaults.IS_PROMISCUOUS));
         }
     }
 
@@ -68,7 +69,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         Node node = null;
         Message message = null;
         Iterator<Node> i;
-        Iterator<Message> mi;
+        Iterator<Message> mi;   
 
         // If there are any messages in the newMessage Q, introduce them
         // into the network.

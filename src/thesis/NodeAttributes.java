@@ -8,10 +8,10 @@ public class NodeAttributes {
   public final int x;
   public final int y;
   public final int range;
-  public final float energy;
+  public final double energy;
   public final boolean isPromiscuous;
 
-  public NodeAttributes(String id, int x, int y, int range, float energy, boolean isPromiscuous) {
+  public NodeAttributes(String id, int x, int y, int range, double energy, boolean isPromiscuous) {
     this.id = id;
     this.x = x;
     this.y = y;
