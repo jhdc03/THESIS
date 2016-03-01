@@ -8,29 +8,48 @@ import java.util.Random;
 import javax.swing.JDialog;
 import thesis.NodeCreator.NodeType;
 
-public class SimEngine implements InputConsumer, SimTime, NodeInspector {
+public class SimEngine implements InputConsumer, SimTime, NodeInspector{
 
     private long time = 0;
     NodeStore store = new NodeStore();
     Queue<Message> messageQueue = new LinkedList<Message>();
     Queue<Message> newMessages = new LinkedList<Message>();
-
+    OrderedSet events;
+    
+    
     @Override
     public long getTime() {
         return time;
     }
+    
+    
+    void doAllEvents() {
+        EventManager e;
+        while ( (e= (EventManager) events.removeFirst()) != null) {
+            time = e.time;
+            e.execute(this , e);
+        }
+    }
 
+    void insert(EventManager e) {
+        events.insert(e);
+    }
+
+    EventManager cancel(EventManager e) {
+        throw new java.lang.RuntimeException("Method not implemented");
+    }
 
     public void AddMultipleNodes() {
         Random r = new Random();
-        double X = 30;
-        double Y = 30;
+        double X = 200;
+        double Y = 200;
         int numberOfNodes = 5;
 
-        for (int i = 1; i <= numberOfNodes; i++) {
-            int range = Defaults.RANGE; // Min range of 50
-            int x = r.nextInt((int) X);
-            int y = r.nextInt((int) Y);
+
+        for (int i = 1; i <= numberOfNodes; i++){
+          int range = r.nextInt(400) + 50; // Min range of 50
+          int x = r.nextInt((int)X);
+          int y = r.nextInt((int)Y);
             InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.ENERGY, Defaults.PACKETDROP, Defaults.TOTALSENT, Defaults.TOTALRECEIVED, Defaults.IS_PROMISCUOUS));
         }
     }
@@ -59,16 +78,21 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
     }
 
     public void runSimulation() {
-
+        
         //Increment sim time
         time++;
-
+        
         //Begin a new quantum
-        OutputHandler.dispatch(EventManager.outQuantumElapsed());
-        System.out.println(time);
-
+        //OutputHandler.dispatch(EventManager.outQuantumElapsed());
+        //System.out.println(time);
+        
+        events = new ListQueue();
+        insert(EventManager.outQuantumElapsed());
+        //insert(EventManager.messageToNode(node.att.id, message, 0));
+        //insert(EventManager.outQuantumElapsed());
         
         MainLoop();
+        doAllEvents();
     }
 
     public void MainLoop() {
@@ -94,7 +118,8 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
             }
             //Introduce the message into the network
-            n.newNarrativeMessage(m.originId, m.destinationId, m.message);
+            //n.newNarrativeMessage(m.originId, m.destinationId, m.message);
+            //insert(EventManager.newNarrativeMessage(n.att.id,m.originId, m.destinationId, m.message, 0));
         }
 
         // If there are messages in the messageQueue try to attempt delivery.
@@ -114,14 +139,16 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
                     // Only allow the nodes in range to hear the broadcast.
                     if (canCommunicate(message.originId, node.getAttributes().id) && message.originId != node.getAttributes().id) {
-                        node.messageToNode(message);
+                        //node.messageToNode(message);
+                        insert(EventManager.messageToNode(node.att.id, message, 0));
                     }
                 }
                 // Else if the messageQueue is not a broadcast try to send it to the
                 // destination id.
             } else if (canCommunicate(message.originId, message.destinationId)) {
                 // SAK - Send the message to the destination node.
-                store.getNode(message.destinationId).messageToNode(message);
+                //store.getNode(message.destinationId).messageToNode(message);
+                insert(EventManager.messageToNode(message.destinationId, message, 0));
             }
         }
 
@@ -158,6 +185,15 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
         // Enter critical area
         switch (e.eventType) {
 
+            
+            case NEW_NARRATIVE_MESSAGE:
+                    store.getNode(e.nodeId).newNarrativeMessage(e.sourceId, e.destinationId, e.transmittedMessage);
+                break;
+            
+            case MESSAGE_TO_NODE:
+                    store.getNode(e.nodeId).messageToNode(e.message);
+                break;
+                
             case IN_ADD_NODE:
                 // Get the node attributes for this input event
                 NodeAttributes ni = e.getNodeAttributes();

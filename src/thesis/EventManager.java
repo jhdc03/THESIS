@@ -4,8 +4,31 @@ package thesis;
 import java.lang.reflect.Field;
 import thesis.NodeCreator.NodeType;
 
-public class EventManager {
+public class EventManager implements Comparable{               
+    
+    /*public void CreateEvent(long time) {
+        this.time = time;
+    }*/
+    
+    public boolean lessThan(Comparable y) {
+        EventManager e = (EventManager) y;  // Will throw an exception if y is not an Event
+        return this.time < e.time;
+    }
+    
+    public void execute(SimEngine simulator, EventManager e){
+        simulator.consumeInput(e);
+        System.out.println("Event : " + e.eventType + "The time is "+ time + "\n" );
+        
+    };
+    
+    
     private static String newline = System.getProperty("line.separator");
+
+    @Override
+    public int compareTo(Object o) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
   public enum EventType {
     // Input event types
     IN_ADD_NODE,IN_DEL_NODE,IN_SET_NODE_PROMISCUITY, IN_INSERT_MESSAGE,
@@ -13,7 +36,11 @@ public class EventManager {
     // Output event types
     OUT_ADD_NODE,OUT_MSG_TRANSMITTED, OUT_DEL_NODE, OUT_DEBUG, OUT_ERROR,OUT_INSERT_MESSAGE, OUT_NARRMSG_RECEIVED, 
     OUT_CONTROLMSG_RECEIVED, OUT_NARRMSG_TRANSMITTED, OUT_CONTROLMSG_TRANSMITTED, 
-    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED, OUT_SIM_RESULTS
+    OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED, OUT_SIM_RESULTS,
+    
+    //Protocol Events
+    NEW_NARRATIVE_MESSAGE, MESSAGE_TO_NODE
+    
   };
   
   public EventType            eventType;
@@ -22,6 +49,7 @@ public class EventManager {
   public String               destinationId;
   public String               informationalMessage;
   public String               transmittedMessage;
+  public Message              message;
   public int                  nodeX;
   public int                  nodeY;
   public int                  nodeRange;
@@ -64,6 +92,7 @@ public class EventManager {
     e.sourceId = message.originId;
     e.destinationId = message.destinationId;
     e.eventType = EventType.IN_INSERT_MESSAGE;
+    e.time = simTime.getTime();
     return e;
   }
   
@@ -71,6 +100,7 @@ public class EventManager {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_INSERT_MESSAGE;
     e.informationalMessage = "Data Generated. Source ID: " + sourceID + " Dest ID: " + destID + " Message: " + message;
+    e.time = simTime.getTime();
     return e;
   }
   
@@ -78,6 +108,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_PACKET_DROPPED;
     d.informationalMessage = "Packet Dropped  : Source ID: " + sourceID + " Dest ID: " + destID +".";
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -91,6 +122,7 @@ public class EventManager {
     e.totalSent=totalSent;
     e.totalReceived=totalReceived;
     e.isPromiscuous = isPromiscuous;
+    e.time = simTime.getTime();
     return e;
   }
 
@@ -98,6 +130,7 @@ public class EventManager {
     EventManager e = new EventManager();
     e.eventType = EventType.IN_DEL_NODE;
     e.nodeId = id;
+    e.time = simTime.getTime();
     return e;
   }
 
@@ -106,6 +139,7 @@ public class EventManager {
     e.eventType = EventType.IN_SET_NODE_PROMISCUITY;
     e.isPromiscuous = isPromiscuous;
     e.nodeId = id;
+    e.time = simTime.getTime();
     return e;
   }
   
@@ -114,6 +148,7 @@ public class EventManager {
     d.eventType = EventType.OUT_ADD_NODE;
     d.setNodeAttributes(n);
     d.informationalMessage = "Added Node : " + n.id + ".";
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -127,7 +162,7 @@ public class EventManager {
     else{
         d.informationalMessage = "Displayed Routing Table of Node : " + n.id + ". Node Energy: " + Math.floor(n.energy * 1000) / 1000+ "%"
             + ". Node packetDrop: " + String.format("%.2f", (n.packetDrop/(float)n.totalReceived) * 100) + "%";}
-
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -135,6 +170,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_SIM_RESULTS;
     d.informationalMessage = message ;
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -143,6 +179,7 @@ public class EventManager {
     d.eventType = EventType.OUT_DEL_NODE;
     d.nodeId = id;
     d.informationalMessage = "Node Out of Energy: " + id  + "%";
+    d.time = simTime.getTime();
     return d;
   }
 
@@ -153,6 +190,7 @@ public class EventManager {
     e.destinationId = destId;
     e.transmittedMessage = message;
     e.informationalMessage = "Node " + sourceId + " successfuly sent a message to Node " + destId + " Message: " + e.transmittedMessage;
+    e.time = simTime.getTime();
     return e;
   }
   
@@ -163,6 +201,7 @@ public class EventManager {
     e.destinationId = destId;
     e.transmittedMessage = message;
     e.informationalMessage = "Node " + sourceId + " transmitted a message to Node " + destId;
+    e.time = simTime.getTime();
     return e;
   }
   
@@ -170,6 +209,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_ERROR;
     d.informationalMessage = informationalMessage;
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -178,6 +218,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEBUG;
     d.informationalMessage = informationalMessage;
+    d.time = simTime.getTime();
     return d;
   }
 
@@ -193,6 +234,7 @@ public class EventManager {
     d.destinationId = msg.destinationId;
     d.transmittedMessage = msg.message;
     d.informationalMessage = d.sourceId + " transmitted control message to " + d.destinationId + " : " + msg.message;
+    d.time = simTime.getTime();
     return d;
   }
 
@@ -203,6 +245,7 @@ public class EventManager {
     d.destinationId = msg.destinationId;
     d.transmittedMessage = msg.message;
     d.informationalMessage = d.sourceId + " transmitted narrative message to " + d.destinationId + " : " + msg.message;
+    d.time = simTime.getTime();
     return d;
   }
   
@@ -213,6 +256,7 @@ public class EventManager {
     d.destinationId = sourceId;
     d.transmittedMessage = msg.message;
     d.informationalMessage = d.sourceId + " received control message from " + d.destinationId + " : " + msg.message;
+    d.time = simTime.getTime();
     return d;
   }
 
@@ -223,6 +267,7 @@ public class EventManager {
     d.destinationId = sourceId;
     d.transmittedMessage = msg.message;
     d.informationalMessage = d.sourceId + " received narrative message from " + d.destinationId + " : " + msg.message;
+    d.time = simTime.getTime();
     return d;
   }
    
@@ -230,14 +275,37 @@ public class EventManager {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_NODE_INFO;
     e.informationalMessage = infoMsg;
+    e.time = simTime.getTime();
     return e;
   }
 
   public static EventManager outQuantumElapsed() {
     EventManager e = new EventManager();
     e.eventType = EventType.OUT_QUANTUM_ELAPSED;
+    e.time= simTime.getTime();
     return e;
   }
+  
+  public static EventManager newNarrativeMessage(String nodeID, String sourceId, String destId, String message, int delay) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.NEW_NARRATIVE_MESSAGE;
+    e.nodeId=nodeID;
+    e.sourceId = sourceId;
+    e.destinationId = destId;
+    e.transmittedMessage = message;
+    e.time= simTime.getTime() + delay;
+    return e;
+  }
+  
+  public static EventManager messageToNode(String nodeID, Message msg, int delay ) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.MESSAGE_TO_NODE;
+    e.message=msg;
+    e.nodeId=nodeID;
+    e.time= simTime.getTime() + delay;
+    return e;
+  }
+  
   
    private static final NodeType[] nodeTypes = NodeType.values();
   public static NodeType[] getNodeTypes() {
@@ -349,6 +417,5 @@ public class EventManager {
 
     return e;
   }
-  
   
 }

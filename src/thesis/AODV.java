@@ -95,7 +95,6 @@ public class AODV extends Node {
                     + " Tried to create a new Narrative Message but the source ID was "
                     + srcID));
         }
-
         /**
          * Build the Message String.
          *
@@ -242,12 +241,12 @@ public class AODV extends Node {
         }
         setTotalReceived(att.totalReceived + 1);
         receiving = true;
-        Medium m = new Medium();
+        /*Medium m = new Medium();
         if (m.drop()) {
             OutputHandler.dispatch(EventManager.outPacketDropped(message.originId, this.att.id));
             setpacketDrop(att.packetDrop + 1);
             return;
-        }
+        }*/
 
         /**
          * Get the message type.
