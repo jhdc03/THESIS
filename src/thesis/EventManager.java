@@ -17,7 +17,7 @@ public class EventManager implements Comparable{
     
     public void execute(SimEngine simulator, EventManager e){
         simulator.consumeInput(e);
-        System.out.println("Event : " + e.eventType + "The time is "+ time + "\n" );
+        //System.out.println("Event : " + e.eventType + "The time is "+ time + "\n" );
         
     };
     
@@ -39,7 +39,10 @@ public class EventManager implements Comparable{
     OUT_QUANTUM_ELAPSED, OUT_MSG_RECEIVED, OUT_NODE_INFO, OUT_DISPLAY_NODE, OUT_PACKET_DROPPED, OUT_SIM_RESULTS,
     
     //Protocol Events
-    NEW_NARRATIVE_MESSAGE, MESSAGE_TO_NODE
+    NEW_NARRATIVE_MESSAGE, MESSAGE_TO_NODE, CLOCK_TICK,
+    
+    //AppLayer
+    GENERATE_DATA
     
   };
   
@@ -60,10 +63,16 @@ public class EventManager implements Comparable{
   public NodeCreator.NodeType nodeType;
   public long                 time;
   public boolean              isPromiscuous;
-  
-  
+  public int                  retries;
+  public int                  NB;
+  public int                  backoff;
+  public int                  state;
+  public int                  role;
+  public String               macadd;
+  public int                  waitACK;
+  public boolean              ACK;
   public NodeAttributes getNodeAttributes() {
-    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, energy, packetDrop, totalSent, totalReceived, isPromiscuous);
+    return new NodeAttributes(nodeId, nodeX, nodeY, nodeRange, energy, packetDrop, totalSent, totalReceived, isPromiscuous, retries, NB, backoff, state, role, macadd, waitACK, ACK);
   }
   
   public void setNodeAttributes(NodeAttributes n) {
@@ -305,8 +314,34 @@ public class EventManager implements Comparable{
     e.time= simTime.getTime() + delay;
     return e;
   }
+  /////////////////////////////////////////////////////////////////////////////////////
+  //Node Events
+  /*public static EventManager Recive_Message(Message msg, int delay ) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.RECEIVE_MESSAGE;
+    e.message=msg;
+    e.time= simTime.getTime() + delay;
+    return e;
+  }*/
   
+  public static EventManager clocktick(String nodeID) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.CLOCK_TICK;
+    e.nodeId=nodeID;
+    e.time= simTime.getTime();
+    return e;
+  }
   
+    public static EventManager generateData(String nodeID, int interval) {
+    EventManager e = new EventManager();
+    e.eventType = EventType.GENERATE_DATA;
+    e.nodeId=nodeID;
+    e.time= simTime.getTime() + interval;
+    return e;
+  }
+  
+  /////////////////////////////////////////////////////////////////////////////////////
+ 
    private static final NodeType[] nodeTypes = NodeType.values();
   public static NodeType[] getNodeTypes() {
     return nodeTypes;

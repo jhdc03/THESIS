@@ -1605,7 +1605,8 @@ public class AODV extends Node {
         /**
          * Receive and process each message on the Receive Queue.
          */
-        while (!rxQueue.isEmpty()) {
+        while (!rxQueue.isEmpty()) {           
+            //insert(EventManager.Recive_Message(rxQueue.remove(), 0));
             receiveMessage(rxQueue.remove());
         }
 
@@ -1743,5 +1744,7 @@ public class AODV extends Node {
         AodvDialog aodvDlg = (AodvDialog) dialog;
         aodvDlg.updateInformation(this.CurrentTick, this.RouteTable);
     }
+
+
 
 }

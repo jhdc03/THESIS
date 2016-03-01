@@ -1,6 +1,7 @@
 package thesis;
 
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -31,7 +32,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
         }
     }
 
-    void insert(EventManager e) {
+    public void insert(EventManager e) {
         events.insert(e);
     }
 
@@ -87,9 +88,6 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
         //System.out.println(time);
         
         events = new ListQueue();
-        insert(EventManager.outQuantumElapsed());
-        //insert(EventManager.messageToNode(node.att.id, message, 0));
-        //insert(EventManager.outQuantumElapsed());
         
         MainLoop();
         doAllEvents();
@@ -119,7 +117,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
             }
             //Introduce the message into the network
             //n.newNarrativeMessage(m.originId, m.destinationId, m.message);
-            //insert(EventManager.newNarrativeMessage(n.att.id,m.originId, m.destinationId, m.message, 0));
+            insert(EventManager.newNarrativeMessage(n.att.id,m.originId, m.destinationId, m.message, 0));
         }
 
         // If there are messages in the messageQueue try to attempt delivery.
@@ -162,10 +160,13 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
             if (node == null) {
                 continue;
             }
-            node.clockTick(); 
-
+            //node.clockTick(); 
+            insert(EventManager.clocktick(node.att.id));
+            /*Message mess = new Message("A", node.att.id, "Generated Data");
+            InputHandler.dispatch(EventManager.inInsertMessage(mess));*/
+            
         }
-
+        insert(EventManager.generateData(node.att.id,10));
         // Check each node for messages waiting to be sent and gather them up
         // to be stored in our message queue.
         i = store.getNodes();
@@ -181,11 +182,32 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
 
     public void consumeInput(EventManager e) {
         Node n;
-
+        
         // Enter critical area
         switch (e.eventType) {
-
-            
+            case GENERATE_DATA:
+                //System.out.println(e.nodeId+"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+               
+                Node node1 = null;
+                Iterator<Node> j;
+                j = store.getNodes();
+                while (j.hasNext()) {
+                    node1 = j.next();
+                    Message tempMessage =  new Message("A", node1.att.id, "Generated Data");
+                    InputHandler.dispatch(EventManager.inInsertMessage(tempMessage));
+                }
+               
+               
+               
+               
+                //Message tempMessage = store.getNode(e.nodeId).generateData();
+                    //store.getNode(e.nodeId).generateData();
+                /*Message tempMessage = store.getNode(e.nodeId).generateData();
+                InputHandler.dispatch(EventManager.inInsertMessage(tempMessage));*/
+                break;
+            case CLOCK_TICK:
+                    store.getNode(e.nodeId).clockTick();
+                break;
             case NEW_NARRATIVE_MESSAGE:
                     store.getNode(e.nodeId).newNarrativeMessage(e.sourceId, e.destinationId, e.transmittedMessage);
                 break;
@@ -202,7 +224,7 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector{
                 String id = assignNodeId();
 
                 // Make a new network node with these attributes
-                ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.energy, ni.packetDrop, ni.totalSent, ni.totalReceived, ni.isPromiscuous);
+               //ni = new NodeAttributes(id, ni.x, ni.y, ni.range, ni.energy, ni.packetDrop, ni.totalSent, ni.totalReceived, ni.isPromiscuous);
                 n = NodeCreator.makeNewNode(getNodeType(), ni);
                 OutputHandler.dispatch(EventManager.outAddNode(ni));
                 // Add it to the node store
