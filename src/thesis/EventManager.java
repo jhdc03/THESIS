@@ -142,7 +142,7 @@ public class EventManager {
     EventManager d = new EventManager();
     d.eventType = EventType.OUT_DEL_NODE;
     d.nodeId = id;
-    d.informationalMessage = "Node Out of Energy: " + id;
+    d.informationalMessage = "Node Out of Energy: " + id  + "%";
     return d;
   }
 

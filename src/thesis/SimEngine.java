@@ -23,21 +23,22 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
 
     public void AddMultipleNodes() {
         Random r = new Random();
-        double X = 200;
-        double Y = 200;
+        double X = 30;
+        double Y = 30;
         int numberOfNodes = 5;
 
         for (int i = 1; i <= numberOfNodes; i++) {
-            int range = r.nextInt(400) + 50; // Min range of 50
+            int range = Defaults.RANGE; // Min range of 50
             int x = r.nextInt((int) X);
             int y = r.nextInt((int) Y);
-            InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.ENERGY, Defaults.packetDrop, Defaults.TOTALSENT, Defaults.TOTALRECEIVED, Defaults.IS_PROMISCUOUS));
+            InputHandler.dispatch(EventManager.inAddNode(x, y, range, Defaults.ENERGY, Defaults.PACKETDROP, Defaults.TOTALSENT, Defaults.TOTALRECEIVED, Defaults.IS_PROMISCUOUS));
         }
     }
 
     public void start() {
         int totaldrop=0;
         int totalreceived=0;
+        float temp;
         AddMultipleNodes();
 
         for (int i = 0; i < Defaults.SIM_TIME_END; i++) {
@@ -52,7 +53,9 @@ public class SimEngine implements InputConsumer, SimTime, NodeInspector {
             totalreceived=+node.getAttributes().totalReceived;
             OutputHandler.dispatch(EventManager.outDisplayNode(node.getAttributes()));
         }
-        OutputHandler.dispatch(EventManager.outSimResults("Average Packet Drop rate : " + String.format("%.2f", (totaldrop/(float)totalreceived) * 100)));
+        temp = totaldrop/(float)totalreceived * 100;
+        OutputHandler.dispatch(EventManager.outSimResults("Average Packet Drop rate : " + 
+                String.format("%.2f", temp)+ "%  Packet Throughput : " +  String.format("%.2f",(100-temp)) + "%" ));
     }
 
     public void runSimulation() {
